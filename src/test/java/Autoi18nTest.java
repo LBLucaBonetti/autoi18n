@@ -30,6 +30,6 @@ class Autoi18nTest {
     autoi18n.run();
 
     // Then
-    assertEquals("Hello, world!\n", baos.toString());
+    assertEquals("Hello, world!" + System.lineSeparator(), baos.toString());
   }
 }
