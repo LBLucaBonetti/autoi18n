@@ -227,7 +227,7 @@
                 <project>
                   <description>autoi18n - A CLI tool to automatically translate words from a source to one or multiple target languages and insert them into Property Resource Bundles</description>
                   <links>
-                    <homepage><a href="https://github.com/LBLucaBonetti/autoi18n" class="bare">https://github.com/LBLucaBonetti/autoi18n</a></homepage>
+                    <homepage>https://github.com/LBLucaBonetti/autoi18n</homepage>
                     <documentation><a href="https://github.com/LBLucaBonetti/autoi18n" class="bare">https://github.com/LBLucaBonetti/autoi18n</a></documentation>
                   </links>
                   <license>MIT</license>
