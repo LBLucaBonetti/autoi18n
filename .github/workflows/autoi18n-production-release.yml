@@ -35,15 +35,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=LBLucaBonetti_autoi18n
   check_version:
+    name: 'Check current project version (should end with -SNAPSHOT to trigger a release)'
     needs: [ sonarcloud_test_and_build ]
     runs-on: ubuntu-latest
     outputs:
       VERSION: ${{ steps.vars.outputs.VERSION }}
     steps:
       - uses: actions/checkout@v4
-      - uses: n1hility/cancel-previous-runs@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-java@v3
         with:
           java-version: '21'
@@ -62,7 +60,7 @@ jobs:
           echo "VERSION=$(echo $version)" >>$GITHUB_OUTPUT
   create_distributions:
     needs: [ check_version ]
-    if: endsWith(${{ needs.precheck.outputs.VERSION }}, '-SNAPSHOT')
+    if: endsWith(${{ needs.check_version.outputs.VERSION }}, '-SNAPSHOT')
     name: 'Create distribution for ${{ matrix.os }}'
     strategy:
       fail-fast: true
