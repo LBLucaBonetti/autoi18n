@@ -207,7 +207,7 @@
                 </release>
                 <distributions>
                   <autoi18n>
-                    <type>NATIVE_IMAGE</type>
+                    <type>BINARY</type>
                     <artifacts>
                       <artifact>
                         <path>{{artifactsDir}}/{{distributionName}}-{{projectVersion}}-linux-x86_64.tar.gz</path>
