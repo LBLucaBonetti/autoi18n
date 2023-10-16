@@ -60,7 +60,7 @@ jobs:
           echo "VERSION=$(echo $version)" >>$GITHUB_OUTPUT
   create_distributions:
     needs: [ check_version ]
-    if: !(endsWith(${{ needs.check_version.outputs.VERSION }}, '-SNAPSHOT'))
+    if: endsWith(${{ needs.check_version.outputs.VERSION }}, '-SNAPSHOT') != true
     name: 'Create distribution for ${{ matrix.os }}'
     strategy:
       fail-fast: true
