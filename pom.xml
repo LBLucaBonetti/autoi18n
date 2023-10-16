@@ -206,7 +206,7 @@
                   </github>
                 </release>
                 <distributions>
-                  <q-cli>
+                  <autoi18n>
                     <type>NATIVE_IMAGE</type>
                     <artifacts>
                       <artifact>
@@ -222,7 +222,7 @@
                         <platform>osx-x86_64</platform>
                       </artifact>
                     </artifacts>
-                  </q-cli>
+                  </autoi18n>
                 </distributions>
                 <project>
                   <description>autoi18n - A CLI tool to automatically translate words from a source to one or multiple target languages and insert them into Property Resource Bundles</description>
