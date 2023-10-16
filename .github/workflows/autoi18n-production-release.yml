@@ -1,66 +1,9 @@
 name: autoi18n production release
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 jobs:
-  sonarcloud_test_and_build:
-    name: SonarCloud, test and build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'corretto'
-          java-version: '21'
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=LBLucaBonetti_autoi18n
-  check_version:
-    name: 'Check current project version (should not end with -SNAPSHOT to trigger a release)'
-    needs: [ sonarcloud_test_and_build ]
-    runs-on: ubuntu-latest
-    outputs:
-      VERSION: ${{ steps.vars.outputs.VERSION }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'corretto'
-      - name: Cache local Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-      - name: Version
-        id: vars
-        shell: bash
-        run: |
-          version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "VERSION=$(echo $version)" >>$GITHUB_OUTPUT
   create_distributions:
-    needs: [ check_version ]
-    if: endsWith(${{ needs.check_version.outputs.VERSION }}, '-SNAPSHOT') != true
     name: 'Create distribution for ${{ matrix.os }}'
     strategy:
       fail-fast: true
@@ -90,6 +33,7 @@ jobs:
             target/distributions/*.zip
             target/distributions/*.tar.gz
   release:
+    name: 'Release'
     needs: [ create_distributions ]
     runs-on: ubuntu-latest
     steps:
