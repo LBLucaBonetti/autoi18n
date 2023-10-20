@@ -210,8 +210,15 @@
                         <enabled>false</enabled>
                       </contributors>
                       <hide>
-                        <categories>merge,unwanted</categories>
-                        <contributors>GitHub,dependabot</contributors>
+                        <uncategorized>true</uncategorized>
+                        <categories>
+                          <category>unwanted</category>
+                          <category>merge</category>
+                        </categories>
+                        <contributors>
+                          <contributor>GitHub</contributor>
+                          <contributor>dependabot</contributor>
+                        </contributors>
                       </hide>
                       <extraProperties>
                         <categorizeScopes>true</categorizeScopes>
