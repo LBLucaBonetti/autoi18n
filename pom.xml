@@ -102,6 +102,12 @@
       <groupId>io.quarkus</groupId>
     </dependency>
     <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <artifactId>quarkus-junit5</artifactId>
       <groupId>io.quarkus</groupId>
       <scope>test</scope>
@@ -269,6 +275,7 @@
     <assembly-plugin.version>3.6.0</assembly-plugin.version>
     <jreleaser-plugin.version>1.8.0</jreleaser-plugin.version>
     <commons-io.version>2.14.0</commons-io.version>
+    <lombok.version>1.18.30</lombok.version>
   </properties>
   <developers>
     <developer>
