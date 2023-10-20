@@ -217,15 +217,19 @@
                         <categorizeScopes>true</categorizeScopes>
                       </extraProperties>
                       <labelers>
-                        <label>unwanted</label>
-                        <title>regex:^(?:(feat|fix|chore)\((jreleaser|project-setup|test|license|native-image)\)!?):\s.*</title>
-                        <order>120</order>
+                        <labeler>
+                          <label>unwanted</label>
+                          <title>
+                            regex:^(?:(feat|fix|chore)\((jreleaser|project-setup|test|license|native-image)\)!?):\s.*
+                          </title>
+                        </labeler>
                       </labelers>
                       <categories>
-                        <title>Unwanted</title>
-                        <key>unwanted</key>
-                        <order>70</order>
-                        <labels>unwanted</labels>
+                        <category>
+                          <title>Unwanted</title>
+                          <key>unwanted</key>
+                          <labels>unwanted</labels>
+                        </category>
                       </categories>
                     </changelog>
                   </github>
