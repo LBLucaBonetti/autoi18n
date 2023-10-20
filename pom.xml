@@ -210,12 +210,23 @@
                         <enabled>false</enabled>
                       </contributors>
                       <hide>
-                        <categories>merge</categories>
+                        <categories>merge,unwanted</categories>
                         <contributors>GitHub,dependabot</contributors>
                       </hide>
                       <extraProperties>
                         <categorizeScopes>true</categorizeScopes>
                       </extraProperties>
+                      <labelers>
+                        <label>unwanted</label>
+                        <title>regex:^(?:(feat|fix|chore)\((jreleaser|project-setup|test|license|native-image)\)!?):\s.*</title>
+                        <order>120</order>
+                      </labelers>
+                      <categories>
+                        <title>Unwanted</title>
+                        <key>unwanted</key>
+                        <order>70</order>
+                        <labels>unwanted</labels>
+                      </categories>
                     </changelog>
                   </github>
                 </release>
