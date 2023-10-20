@@ -1,9 +1,10 @@
+package it.lbsoftware.autoi18n;
+
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.quarkus.test.junit.QuarkusTest;
-import it.lbsoftware.autoi18n.Autoi18n;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import picocli.CommandLine;
 
 @QuarkusTest
-class Autoi18nTest {
+class Autoi18nTests {
 
   private CommandLine commandLine;
   private StringWriter stringWriter;

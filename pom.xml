@@ -112,6 +112,11 @@
       <groupId>io.quarkus</groupId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jacoco</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <dependencyManagement>
     <dependencies>
@@ -202,12 +207,15 @@
                       <format>- {{commitShortHash}} {{commitTitle}}</format>
                       <preset>conventional-commits</preset>
                       <contributors>
-                        <format>- {{contributorName}}</format>
+                        <enabled>false</enabled>
                       </contributors>
                       <hide>
                         <categories>merge</categories>
                         <contributors>GitHub,dependabot</contributors>
                       </hide>
+                      <extraProperties>
+                        <categorizeScopes>true</categorizeScopes>
+                      </extraProperties>
                     </changelog>
                   </github>
                 </release>
