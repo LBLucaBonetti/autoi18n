@@ -209,17 +209,6 @@
                       <contributors>
                         <enabled>false</enabled>
                       </contributors>
-                      <hide>
-                        <uncategorized>true</uncategorized>
-                        <categories>
-                          <category>unwanted</category>
-                          <category>merge</category>
-                        </categories>
-                        <contributors>
-                          <contributor>GitHub</contributor>
-                          <contributor>dependabot</contributor>
-                        </contributors>
-                      </hide>
                       <extraProperties>
                         <categorizeScopes>true</categorizeScopes>
                       </extraProperties>
@@ -238,6 +227,17 @@
                           <labels>unwanted</labels>
                         </category>
                       </categories>
+                      <hide>
+                        <uncategorized>true</uncategorized>
+                        <categories>
+                          <category>unwanted</category>
+                          <category>merge</category>
+                        </categories>
+                        <contributors>
+                          <contributor>GitHub</contributor>
+                          <contributor>dependabot</contributor>
+                        </contributors>
+                      </hide>
                     </changelog>
                   </github>
                 </release>
