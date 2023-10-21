@@ -212,25 +212,9 @@
                       <extraProperties>
                         <categorizeScopes>true</categorizeScopes>
                       </extraProperties>
-                      <labelers>
-                        <labeler>
-                          <label>unwanted</label>
-                          <title>
-                            regex:^(?:(feat|fix|chore)\((jreleaser|project-setup|test|license|native-image)\)!?):\s.*
-                          </title>
-                        </labeler>
-                      </labelers>
-                      <categories>
-                        <category>
-                          <title>Unwanted</title>
-                          <key>unwanted</key>
-                          <labels>unwanted</labels>
-                        </category>
-                      </categories>
                       <hide>
                         <uncategorized>true</uncategorized>
                         <categories>
-                          <category>unwanted</category>
                           <category>merge</category>
                         </categories>
                         <contributors>
