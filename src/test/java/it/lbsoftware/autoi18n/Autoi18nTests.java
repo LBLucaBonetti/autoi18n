@@ -1,9 +1,7 @@
 package it.lbsoftware.autoi18n;
 
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
-import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_ENTRY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -25,11 +23,6 @@ class Autoi18nTests {
   private StringWriter outStringWriter;
   private StringWriter errorStringWriter;
 
-  private void assertPrintsRequired(final String requiredField) {
-    assertTrue(
-        errorStringWriter.toString().startsWith("Missing required option: '" + requiredField));
-  }
-
   private void assertPrintsUsage() {
     assertTrue(outStringWriter.toString().startsWith("Usage: " + AUTOI18N_NAME));
   }
@@ -48,21 +41,10 @@ class Autoi18nTests {
     commandLine.setErr(new PrintWriter(errorStringWriter));
   }
 
-  @Test
-  @DisplayName("Should require entry with no options nor parameters")
-  void test1() {
-    // Given and when
-    var exitCode = commandLine.execute();
-
-    // Then
-    assertNotEquals(0, exitCode);
-    assertPrintsRequired(OPTION_LONG_ENTRY);
-  }
-
   @ParameterizedTest
   @ValueSource(strings = {"-h", "--help"})
   @DisplayName("Should print usage with options")
-  void test2(final String args) {
+  void test1(final String args) {
     // Given and when
     var exitCode = commandLine.execute(args);
 
@@ -74,7 +56,7 @@ class Autoi18nTests {
   @ParameterizedTest
   @ValueSource(strings = {"-V", "--version"})
   @DisplayName("Should print version")
-  void test3(final String args) {
+  void test2(final String args) {
     // Given and when
     var exitCode = commandLine.execute(args);
 
@@ -85,9 +67,10 @@ class Autoi18nTests {
 
   @Test
   @DisplayName("Should gather entries defaulting to empty")
-  void test4() {
+  void test3() {
     // Given
     String[] args = {
+      "-len",
       "-ekey1=value1",
       "-ekey2",
       "-ekey3=",
@@ -96,7 +79,7 @@ class Autoi18nTests {
       "--entry=key6=",
       "-ekey7=value7,key8=value8"
     };
-    int argsLength = args.length + 1; // +1 because of the last item being split
+    int argsLength = args.length;
 
     var exitCode = commandLine.execute(args);
 
@@ -114,9 +97,9 @@ class Autoi18nTests {
 
   @Test
   @DisplayName("Should pick the latest key entry")
-  void test5() {
+  void test4() {
     // Given
-    String[] args = {"-ekey=value1", "-ekey=value2", "-ekey=value3", "-ekey=", "-ekey"};
+    String[] args = {"-len", "-ekey=value1", "-ekey=value2", "-ekey=value3", "-ekey=", "-ekey"};
 
     // When
     var exitCode = commandLine.execute(args);

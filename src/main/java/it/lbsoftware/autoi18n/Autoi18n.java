@@ -2,9 +2,13 @@ package it.lbsoftware.autoi18n;
 
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_ENTRY;
+import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_LANGUAGE;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_ENTRY;
+import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_LANGUAGE;
 
+import it.lbsoftware.autoi18n.converters.LocaleTypeConverter;
 import it.lbsoftware.autoi18n.utils.VersionProvider;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import lombok.Getter;
@@ -28,8 +32,19 @@ public class Autoi18n implements Callable<Integer> {
       splitSynopsisLabel = ",",
       required = true,
       description =
-          "A key-value to translate; an unspecified or blank value will not be translated nor inserted into language files.")
+          "Key-value item(s) to translate; an unspecified or blank value will not be translated nor inserted into language files.",
+      paramLabel = "<key>=<value>")
   private Map<String, String> entries;
+
+  @Getter
+  @Option(
+      names = {OPTION_SHORT_LANGUAGE, OPTION_LONG_LANGUAGE},
+      required = true,
+      description =
+          "The source language, according to the ISO 639 alpha-2 or alpha-3 standard; it is case insensitive.",
+      converter = LocaleTypeConverter.class,
+      paramLabel = "<language>")
+  private Locale locale;
 
   @Spec private CommandSpec commandSpec;
 
