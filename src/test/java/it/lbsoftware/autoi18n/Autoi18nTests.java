@@ -88,15 +88,22 @@ class Autoi18nTests {
   void test4() {
     // Given
     String[] args = {
-      "-ekey1=value1", "-ekey2", "-ekey3=", "--entry=key4=value4", "--entry=key5", "--entry=key6="
+      "-ekey1=value1",
+      "-ekey2",
+      "-ekey3=",
+      "--entry=key4=value4",
+      "--entry=key5",
+      "--entry=key6=",
+      "-ekey7=value7,key8=value8"
     };
+    int argsLength = args.length + 1; // +1 because of the last item being split
 
     var exitCode = commandLine.execute(args);
 
     // Then
     assertEquals(0, exitCode);
     var entries = autoi18n.getEntries();
-    assertEquals(args.length, entries.keySet().size());
+    assertEquals(argsLength, entries.keySet().size());
     assertEquals("value1", entries.get("key1"));
     assertEquals(StringUtils.EMPTY, entries.get("key2"));
     assertEquals(StringUtils.EMPTY, entries.get("key3"));

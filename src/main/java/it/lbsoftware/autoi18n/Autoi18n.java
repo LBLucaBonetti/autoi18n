@@ -24,6 +24,8 @@ public class Autoi18n implements Callable<Integer> {
   @Option(
       names = {OPTION_SHORT_ENTRY, OPTION_LONG_ENTRY},
       mapFallbackValue = StringUtils.EMPTY,
+      split = ",",
+      splitSynopsisLabel = ",",
       required = true,
       description =
           "A key-value to translate; an unspecified or blank value will not be translated nor inserted into language files.")
