@@ -1,4 +1,4 @@
-package it.lbsoftware.autoi18n.constants;
+package it.lbsoftware.autoi18n.translations;
 
 import lombok.AccessLevel;
 import lombok.Getter;

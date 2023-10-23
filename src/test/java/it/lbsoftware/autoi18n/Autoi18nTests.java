@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.quarkus.test.junit.QuarkusTest;
-import it.lbsoftware.autoi18n.constants.TranslationEngine;
+import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.apache.commons.lang3.StringUtils;

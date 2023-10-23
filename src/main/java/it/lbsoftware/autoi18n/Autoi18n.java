@@ -8,8 +8,8 @@ import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_ENTRY;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_LANGUAGE;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_TRANSLATION_ENGINE;
 
-import it.lbsoftware.autoi18n.constants.TranslationEngine;
 import it.lbsoftware.autoi18n.converters.LocaleTypeConverter;
+import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.VersionProvider;
 import java.util.Locale;
 import java.util.Map;
