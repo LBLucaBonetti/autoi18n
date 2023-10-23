@@ -2,9 +2,11 @@ package it.lbsoftware.autoi18n;
 
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.quarkus.test.junit.QuarkusTest;
+import it.lbsoftware.autoi18n.constants.TranslationEngine;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.apache.commons.lang3.StringUtils;
@@ -109,5 +111,19 @@ class Autoi18nTests {
     var entries = autoi18n.getEntries();
     assertEquals(1, entries.keySet().size());
     assertEquals(StringUtils.EMPTY, entries.get("key"));
+  }
+
+  @Test
+  @DisplayName("Should not recognize an invalid translation engine and default it")
+  void test5() {
+    // Given
+    String[] args = {"-len", "-ekey1=value1", "-tinvalidTranslationEngine"};
+
+    // When
+    var exitCode = commandLine.execute(args);
+
+    // Then
+    assertNotEquals(0, exitCode);
+    assertEquals(TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3, autoi18n.getTranslationEngine());
   }
 }

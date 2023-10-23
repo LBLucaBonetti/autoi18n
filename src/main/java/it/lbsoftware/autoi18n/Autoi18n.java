@@ -3,9 +3,12 @@ package it.lbsoftware.autoi18n;
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_ENTRY;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_LANGUAGE;
+import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_TRANSLATION_ENGINE;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_ENTRY;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_LANGUAGE;
+import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_TRANSLATION_ENGINE;
 
+import it.lbsoftware.autoi18n.constants.TranslationEngine;
 import it.lbsoftware.autoi18n.converters.LocaleTypeConverter;
 import it.lbsoftware.autoi18n.utils.VersionProvider;
 import java.util.Locale;
@@ -27,13 +30,13 @@ public class Autoi18n implements Callable<Integer> {
   @Getter
   @Option(
       names = {OPTION_SHORT_ENTRY, OPTION_LONG_ENTRY},
-      mapFallbackValue = StringUtils.EMPTY,
-      split = ",",
-      splitSynopsisLabel = ",",
       required = true,
       description =
           "Key-value item(s) to translate; an unspecified or blank value will not be translated nor inserted into language files.",
-      paramLabel = "<key>=<value>")
+      paramLabel = "<key>=<value>",
+      mapFallbackValue = StringUtils.EMPTY,
+      split = ",",
+      splitSynopsisLabel = ",")
   private Map<String, String> entries;
 
   @Getter
@@ -42,9 +45,17 @@ public class Autoi18n implements Callable<Integer> {
       required = true,
       description =
           "The source language, according to the ISO 639 alpha-2 or alpha-3 standard; it is case insensitive.",
-      converter = LocaleTypeConverter.class,
-      paramLabel = "<language>")
+      paramLabel = "<language>",
+      converter = LocaleTypeConverter.class)
   private Locale locale;
+
+  @Getter
+  @Option(
+      names = {OPTION_SHORT_TRANSLATION_ENGINE, OPTION_LONG_TRANSLATION_ENGINE},
+      required = false,
+      description = "The translation engine to use",
+      paramLabel = "<translationEngine>")
+  private TranslationEngine translationEngine = TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3;
 
   @Spec private CommandSpec commandSpec;
 
