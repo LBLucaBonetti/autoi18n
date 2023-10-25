@@ -1,6 +1,7 @@
 package it.lbsoftware.autoi18n.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -33,7 +35,7 @@ class LocaleTypeConverterTests {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"s", "tooLongString"})
+  @ValueSource(strings = {"s", "tooLongString", "invalid-invalid", "en-invalid"})
   @DisplayName("Should throw with invalid Locale language string")
   void test2(final String value) {
     // Given, when and then
@@ -75,5 +77,23 @@ class LocaleTypeConverterTests {
 
     // Then
     assertEquals(StringUtils.swapCase(value), res.getLanguage() + "-" + res.getCountry());
+  }
+
+  @ParameterizedTest
+  @EmptySource
+  @ValueSource(strings = {" "})
+  @DisplayName("Should have blank region when region is not provided")
+  void test6(final String region) {
+    // Given
+    var language = "en";
+    var value = language + "-" + region;
+
+    // When
+    var res = localeTypeConverter.convert(value);
+
+    // Then
+    assertEquals(language, res.getLanguage());
+    assertNotNull(res.getCountry());
+    assertEquals(StringUtils.EMPTY, res.getCountry());
   }
 }
