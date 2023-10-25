@@ -5,6 +5,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>autoi18n</artifactId>
   <build>
+    <extensions>
+      <extension>
+        <artifactId>os-maven-plugin</artifactId>
+        <groupId>kr.motd.maven</groupId>
+        <version>${os-plugin.version}</version>
+      </extension>
+    </extensions>
     <plugins>
       <plugin>
         <artifactId>quarkus-maven-plugin</artifactId>
@@ -62,35 +69,28 @@
         <version>${surefire-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>${assembly-plugin.version}</version>
         <configuration>
-          <attach>false</attach>
           <appendAssemblyId>false</appendAssemblyId>
+          <attach>false</attach>
           <finalName>${project.artifactId}-${project.version}-${os.detected.classifier}</finalName>
           <outputDirectory>${project.build.directory}/distributions</outputDirectory>
-          <workDirectory>${project.build.directory}/assembly/work</workDirectory>
           <skipAssembly>true</skipAssembly>
+          <workDirectory>${project.build.directory}/assembly/work</workDirectory>
         </configuration>
         <executions>
           <execution>
-            <id>make-distribution</id>
-            <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
+            <id>make-distribution</id>
+            <phase>package</phase>
           </execution>
         </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>${assembly-plugin.version}</version>
       </plugin>
     </plugins>
-    <extensions>
-      <extension>
-        <groupId>kr.motd.maven</groupId>
-        <artifactId>os-maven-plugin</artifactId>
-        <version>${os-plugin.version}</version>
-      </extension>
-    </extensions>
   </build>
   <dependencies>
     <dependency>
@@ -102,10 +102,15 @@
       <groupId>io.quarkus</groupId>
     </dependency>
     <dependency>
-      <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
+      <groupId>org.projectlombok</groupId>
       <scope>provided</scope>
+      <version>${lombok.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>commons-lang3</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <version>${commons.lang3.version}</version>
     </dependency>
     <dependency>
       <artifactId>quarkus-junit5</artifactId>
@@ -113,8 +118,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jacoco</artifactId>
+      <groupId>io.quarkus</groupId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -129,6 +134,12 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <developers>
+    <developer>
+      <id>LBLucaBonetti</id>
+      <name>Luca Bonetti</name>
+    </developer>
+  </developers>
   <groupId>it.lbsoftware</groupId>
   <modelVersion>4.0.0</modelVersion>
   <profiles>
@@ -145,89 +156,50 @@
       </properties>
     </profile>
     <profile>
-      <id>dist</id>
       <activation>
         <property>
           <name>dist</name>
         </property>
       </activation>
-      <properties>
-        <skipTests>true</skipTests>
-      </properties>
       <build>
         <plugins>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
             <configuration combine.self="append">
-              <skipAssembly>false</skipAssembly>
               <descriptors>
                 <descriptor>src/main/assembly/assembly.xml</descriptor>
               </descriptors>
+              <skipAssembly>false</skipAssembly>
             </configuration>
+            <groupId>org.apache.maven.plugins</groupId>
           </plugin>
         </plugins>
       </build>
+      <id>dist</id>
+      <properties>
+        <skipTests>true</skipTests>
+      </properties>
     </profile>
     <profile>
-      <id>dist-windows</id>
       <activation>
         <os>
           <family>windows</family>
         </os>
       </activation>
+      <id>dist-windows</id>
       <properties>
         <executable-suffix>.exe</executable-suffix>
       </properties>
     </profile>
     <profile>
-      <id>release</id>
       <build>
         <plugins>
           <plugin>
-            <groupId>org.jreleaser</groupId>
             <artifactId>jreleaser-maven-plugin</artifactId>
-            <version>${jreleaser-plugin.version}</version>
-            <dependencies>
-              <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
-              </dependency>
-            </dependencies>
             <configuration>
               <jreleaser>
-                <release>
-                  <github>
-                    <tagName>{{projectVersion}}</tagName>
-                    <releaseName>{{projectVersion}}</releaseName>
-                    <overwrite>true</overwrite>
-                    <changelog>
-                      <formatted>ALWAYS</formatted>
-                      <format>- {{commitShortHash}} {{commitTitle}}</format>
-                      <preset>conventional-commits</preset>
-                      <contributors>
-                        <enabled>false</enabled>
-                      </contributors>
-                      <extraProperties>
-                        <categorizeScopes>true</categorizeScopes>
-                      </extraProperties>
-                      <hide>
-                        <uncategorized>true</uncategorized>
-                        <categories>
-                          <category>merge</category>
-                        </categories>
-                        <contributors>
-                          <contributor>GitHub</contributor>
-                          <contributor>dependabot</contributor>
-                        </contributors>
-                      </hide>
-                    </changelog>
-                  </github>
-                </release>
                 <distributions>
                   <autoi18n>
-                    <type>BINARY</type>
                     <artifacts>
                       <artifact>
                         <path>
@@ -248,31 +220,79 @@
                         <platform>osx-x86_64</platform>
                       </artifact>
                     </artifacts>
+                    <type>BINARY</type>
                   </autoi18n>
                 </distributions>
                 <project>
+                  <authors>Luca Bonetti</authors>
+                  <copyright>2023 Luca Bonetti</copyright>
                   <description>autoi18n - A CLI tool to automatically translate words from a source
                     to one or multiple target languages and insert them into Property Resource
                     Bundles
                   </description>
-                  <links>
-                    <homepage>https://github.com/LBLucaBonetti/autoi18n</homepage>
-                    <documentation>https://github.com/LBLucaBonetti/autoi18n</documentation>
-                  </links>
                   <license>MIT</license>
-                  <authors>Luca Bonetti</authors>
-                  <copyright>2023 Luca Bonetti</copyright>
+                  <links>
+                    <documentation>https://github.com/LBLucaBonetti/autoi18n</documentation>
+                    <homepage>https://github.com/LBLucaBonetti/autoi18n</homepage>
+                  </links>
                 </project>
+                <release>
+                  <github>
+                    <changelog>
+                      <contributors>
+                        <enabled>false</enabled>
+                      </contributors>
+                      <extraProperties>
+                        <categorizeScopes>true</categorizeScopes>
+                      </extraProperties>
+                      <format>- {{commitShortHash}} {{commitTitle}}</format>
+                      <formatted>ALWAYS</formatted>
+                      <hide>
+                        <categories>
+                          <category>merge</category>
+                        </categories>
+                        <contributors>
+                          <contributor>GitHub</contributor>
+                          <contributor>dependabot</contributor>
+                        </contributors>
+                        <uncategorized>true</uncategorized>
+                      </hide>
+                      <preset>conventional-commits</preset>
+                    </changelog>
+                    <overwrite>true</overwrite>
+                    <releaseName>{{projectVersion}}</releaseName>
+                    <tagName>{{projectVersion}}</tagName>
+                  </github>
+                </release>
               </jreleaser>
             </configuration>
+            <dependencies>
+              <dependency>
+                <artifactId>commons-io</artifactId>
+                <groupId>commons-io</groupId>
+                <version>${commons-io.version}</version>
+              </dependency>
+            </dependencies>
+            <groupId>org.jreleaser</groupId>
+            <version>${jreleaser-plugin.version}</version>
           </plugin>
         </plugins>
       </build>
+      <id>release</id>
     </profile>
   </profiles>
   <properties>
+    <artifactsDir>target/distributions</artifactsDir>
+    <assembly-plugin.version>3.6.0</assembly-plugin.version>
+    <commons-io.version>2.14.0</commons-io.version>
+    <commons.lang3.version>3.13.0</commons.lang3.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
+    <exec.mainClass>it.lbsoftware.autoi18n.Autoi18n</exec.mainClass>
+    <executable-suffix/>
+    <jreleaser-plugin.version>1.8.0</jreleaser-plugin.version>
+    <lombok.version>1.18.30</lombok.version>
     <maven.compiler.release>21</maven.compiler.release>
+    <os-plugin.version>1.7.1</os-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
@@ -282,20 +302,6 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.organization>lblucabonetti</sonar.organization>
     <surefire-plugin.version>3.1.2</surefire-plugin.version>
-    <exec.mainClass>it.lbsoftware.autoi18n.Autoi18n</exec.mainClass>
-    <executable-suffix/>
-    <artifactsDir>target/distributions</artifactsDir>
-    <os-plugin.version>1.7.1</os-plugin.version>
-    <assembly-plugin.version>3.6.0</assembly-plugin.version>
-    <jreleaser-plugin.version>1.8.0</jreleaser-plugin.version>
-    <commons-io.version>2.14.0</commons-io.version>
-    <lombok.version>1.18.30</lombok.version>
   </properties>
-  <developers>
-    <developer>
-      <id>LBLucaBonetti</id>
-      <name>Luca Bonetti</name>
-    </developer>
-  </developers>
   <version>0.0.1</version>
 </project>
