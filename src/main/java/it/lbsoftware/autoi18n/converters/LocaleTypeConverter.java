@@ -8,14 +8,14 @@ import picocli.CommandLine.ITypeConverter;
 public class LocaleTypeConverter implements ITypeConverter<Locale> {
 
   @Override
-  public Locale convert(String value) {
+  public Locale convert(final String value) {
     return Optional.ofNullable(value)
         .filter(StringUtils::isNotBlank)
         .map(this::toLocale)
         .orElseThrow(IllegalArgumentException::new);
   }
 
-  private Locale toLocale(String value) {
+  private Locale toLocale(final String value) {
     var split = value.split("-");
     var localeBuilder = new Locale.Builder().setLanguage(split[0]);
     if (split.length > 1 && StringUtils.isNotBlank(split[1])) {
