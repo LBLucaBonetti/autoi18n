@@ -1,5 +1,10 @@
 package it.lbsoftware.autoi18n;
 
+import static it.lbsoftware.autoi18n.TestUtils.optionLongEntry;
+import static it.lbsoftware.autoi18n.TestUtils.optionShortEntry;
+import static it.lbsoftware.autoi18n.TestUtils.optionShortInputLanguage;
+import static it.lbsoftware.autoi18n.TestUtils.optionShortOutputLanguages;
+import static it.lbsoftware.autoi18n.TestUtils.optionShortTranslationEngine;
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -72,23 +77,24 @@ class Autoi18nTests {
   void test3() {
     // Given
     String[] args = {
-      "-len",
-      "-ekey1=value1",
-      "-ekey2",
-      "-ekey3=",
-      "--entry=key4=value4",
-      "--entry=key5",
-      "--entry=key6=",
-      "-ekey7=value7,key8=value8"
+      optionShortInputLanguage("en"),
+      optionShortOutputLanguages("it"),
+      optionShortEntry("key1=value1"),
+      optionShortEntry("key2"),
+      optionShortEntry("key3="),
+      optionLongEntry("key4=value4"),
+      optionLongEntry("key5"),
+      optionLongEntry("key6="),
+      optionShortEntry("key7=value7,key8=value8")
     };
-    int argsLength = args.length;
+    int entryArgsLength = args.length - 1;
 
     var exitCode = commandLine.execute(args);
 
     // Then
     assertEquals(0, exitCode);
     var entries = autoi18n.getEntries();
-    assertEquals(argsLength, entries.keySet().size());
+    assertEquals(entryArgsLength, entries.keySet().size());
     assertEquals("value1", entries.get("key1"));
     assertEquals(StringUtils.EMPTY, entries.get("key2"));
     assertEquals(StringUtils.EMPTY, entries.get("key3"));
@@ -101,7 +107,15 @@ class Autoi18nTests {
   @DisplayName("Should pick the latest key entry")
   void test4() {
     // Given
-    String[] args = {"-len", "-ekey=value1", "-ekey=value2", "-ekey=value3", "-ekey=", "-ekey"};
+    String[] args = {
+      optionShortInputLanguage("en"),
+      optionShortOutputLanguages("it"),
+      optionShortEntry("key=value1"),
+      optionShortEntry("key=value2"),
+      optionShortEntry("key=value3"),
+      optionShortEntry("key="),
+      optionShortEntry("key")
+    };
 
     // When
     var exitCode = commandLine.execute(args);
@@ -117,7 +131,11 @@ class Autoi18nTests {
   @DisplayName("Should not recognize an invalid translation engine and default it")
   void test5() {
     // Given
-    String[] args = {"-len", "-ekey1=value1", "-tinvalidTranslationEngine"};
+    String[] args = {
+      optionShortInputLanguage("en"),
+      optionShortEntry("key1=value1"),
+      optionShortTranslationEngine("invalidTranslationEngine")
+    };
 
     // When
     var exitCode = commandLine.execute(args);
@@ -125,5 +143,30 @@ class Autoi18nTests {
     // Then
     assertNotEquals(0, exitCode);
     assertEquals(TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3, autoi18n.getTranslationEngine());
+  }
+
+  @Test
+  @DisplayName("Should pick multiple output languages")
+  void test6() {
+    // Given
+    var lan1 = "en-US";
+    var lan2 = "it";
+    String[] args = {
+      optionShortInputLanguage("en"),
+      optionShortOutputLanguages(lan1 + "," + lan2),
+      optionShortEntry("key1=value1")
+    };
+    int outputLanguageArgsLength = 2;
+
+    // When
+    var exitCode = commandLine.execute(args);
+
+    // Then
+    assertEquals(0, exitCode);
+    var outputLocales = autoi18n.getOutputLocales();
+    assertEquals(outputLanguageArgsLength, outputLocales.size());
+    assertEquals(
+        lan1, outputLocales.getFirst().getLanguage() + "-" + outputLocales.getFirst().getCountry());
+    assertEquals(lan2, outputLocales.getLast().getLanguage());
   }
 }
