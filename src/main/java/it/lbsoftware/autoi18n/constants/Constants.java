@@ -11,6 +11,7 @@ public final class Constants {
   public static final String OPTION_LONG_TRANSLATION_ENGINE = "--translation-engine";
   public static final String OPTION_SHORT_OUTPUT_LANGUAGES = "-o";
   public static final String OPTION_LONG_OUTPUT_LANGUAGES = "--output-languages";
+  public static final String OPTION_LONG_TRANSLATION_ENGINE_PARAMS = "--translation-engine-params";
 
   private Constants() {
     throw new UnsupportedOperationException("This class cannot be instantiated");

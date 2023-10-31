@@ -39,4 +39,8 @@ public final class TestUtils {
   public static String optionLongOutputLanguages(final String value) {
     return Constants.OPTION_LONG_OUTPUT_LANGUAGES + "=" + value;
   }
+
+  public static String optionLongTranslationEngineParams(final String value) {
+    return Constants.OPTION_LONG_TRANSLATION_ENGINE_PARAMS + "=" + value;
+  }
 }
