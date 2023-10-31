@@ -1,11 +1,11 @@
 package it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3;
 
 import it.lbsoftware.autoi18n.converters.LocaleTypeConverter;
+import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.translations.TranslationService;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.api.GoogleCloudTranslationV3Api;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.TranslateTextRequest;
-import it.lbsoftware.autoi18n.utils.TranslationEngineParams;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -81,8 +81,8 @@ public class GoogleCloudTranslationV3 implements TranslationService {
       var translateTextResponse =
           new GoogleCloudTranslationV3Api()
               .translate(
-                  translationEngineParams.getApiKey(),
-                  translationEngineParams.getProjectNumberOrId(),
+                  translationEngineParams.apiKey(),
+                  translationEngineParams.projectNumberOrId(),
                   translateTextRequest);
       return translateTextResponse.translations().get(0).translatedText();
     } catch (Exception e) {

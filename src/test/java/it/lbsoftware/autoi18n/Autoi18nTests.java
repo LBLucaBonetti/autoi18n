@@ -5,6 +5,7 @@ import static it.lbsoftware.autoi18n.TestUtils.optionShortEntry;
 import static it.lbsoftware.autoi18n.TestUtils.optionShortInputLanguage;
 import static it.lbsoftware.autoi18n.TestUtils.optionShortOutputLanguages;
 import static it.lbsoftware.autoi18n.TestUtils.optionShortTranslationEngine;
+import static it.lbsoftware.autoi18n.TestUtils.requiredTranslationEngineParamsForDefaultTranslationEngine;
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import picocli.CommandLine;
+import picocli.CommandLine.ExitCode;
 
 @QuarkusTest
 class Autoi18nTests {
@@ -56,7 +58,7 @@ class Autoi18nTests {
     var exitCode = commandLine.execute(args);
 
     // Then
-    assertEquals(0, exitCode);
+    assertEquals(ExitCode.OK, exitCode);
     assertPrintsUsage();
   }
 
@@ -68,7 +70,7 @@ class Autoi18nTests {
     var exitCode = commandLine.execute(args);
 
     // Then
-    assertEquals(0, exitCode);
+    assertEquals(ExitCode.OK, exitCode);
     assertPrintsVersion();
   }
 
@@ -85,14 +87,15 @@ class Autoi18nTests {
       optionLongEntry("key4=value4"),
       optionLongEntry("key5"),
       optionLongEntry("key6="),
-      optionShortEntry("key7=value7,key8=value8")
+      optionShortEntry("key7=value7,key8=value8"),
+      requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
-    int entryArgsLength = args.length - 1;
+    int entryArgsLength = args.length - 2;
 
     var exitCode = commandLine.execute(args);
 
     // Then
-    assertEquals(0, exitCode);
+    assertEquals(ExitCode.OK, exitCode);
     var entries = autoi18n.getEntries();
     assertEquals(entryArgsLength, entries.keySet().size());
     assertEquals("value1", entries.get("key1"));
@@ -114,14 +117,15 @@ class Autoi18nTests {
       optionShortEntry("key=value2"),
       optionShortEntry("key=value3"),
       optionShortEntry("key="),
-      optionShortEntry("key")
+      optionShortEntry("key"),
+      requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
 
     // When
     var exitCode = commandLine.execute(args);
 
     // Then
-    assertEquals(0, exitCode);
+    assertEquals(ExitCode.OK, exitCode);
     var entries = autoi18n.getEntries();
     assertEquals(1, entries.keySet().size());
     assertEquals(StringUtils.EMPTY, entries.get("key"));
@@ -141,7 +145,7 @@ class Autoi18nTests {
     var exitCode = commandLine.execute(args);
 
     // Then
-    assertNotEquals(0, exitCode);
+    assertNotEquals(ExitCode.OK, exitCode);
     assertEquals(TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3, autoi18n.getTranslationEngine());
   }
 
@@ -154,7 +158,8 @@ class Autoi18nTests {
     String[] args = {
       optionShortInputLanguage("en"),
       optionShortOutputLanguages(lan1 + "," + lan2),
-      optionShortEntry("key1=value1")
+      optionShortEntry("key1=value1"),
+      requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
     int outputLanguageArgsLength = 2;
 
@@ -162,7 +167,7 @@ class Autoi18nTests {
     var exitCode = commandLine.execute(args);
 
     // Then
-    assertEquals(0, exitCode);
+    assertEquals(ExitCode.OK, exitCode);
     var outputLocales = autoi18n.getOutputLocales();
     assertEquals(outputLanguageArgsLength, outputLocales.size());
     assertEquals(

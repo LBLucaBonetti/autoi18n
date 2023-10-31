@@ -12,10 +12,9 @@ import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_OUTPUT_LAN
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_TRANSLATION_ENGINE;
 
 import it.lbsoftware.autoi18n.converters.LocaleTypeConverter;
-import it.lbsoftware.autoi18n.converters.TranslationEngineParamsConverter;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
-import it.lbsoftware.autoi18n.utils.TranslationEngineParams;
 import it.lbsoftware.autoi18n.utils.VersionProvider;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +23,7 @@ import java.util.concurrent.Callable;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
@@ -88,20 +88,31 @@ The translation engine to use; the following engines are actually available:
       names = {OPTION_LONG_TRANSLATION_ENGINE_PARAMS},
       required = false,
       description =
-          "Additional parameters to customize the translation engine; see <translationEngine> description for more details",
+          "Additional key-value pairs to customize the translation engine; see <translationEngine> description for more details",
       paramLabel = "<key>=<value>",
-      converter = TranslationEngineParamsConverter.class)
-  private TranslationEngineParams translationEngineParams = new TranslationEngineParams();
+      mapFallbackValue = StringUtils.EMPTY,
+      split = ",",
+      splitSynopsisLabel = ",")
+  private Map<String, String> params = new HashMap<>();
 
   @Spec private CommandSpec commandSpec;
 
   @Override
   public Integer call() {
+    var translationEngineParamsValidator = translationEngine.getTranslationEngineParamsValidator();
+    if (!translationEngineParamsValidator.validate(params)) {
+      System.err.println(
+          "Invalid set of parameters for the translation engine "
+              + translationEngine.getName()
+              + ". See <translationEngine> description for more details");
+      return ExitCode.USAGE;
+    }
+    var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
+    var translationEngineParams = translationEngineParamsProvider.provide(params);
+    var translationService = translationEngine.getTranslationService();
     System.out.println(
-        translationEngine
-            .getTranslationService()
-            .translate(
-                entries, inputLocale, new HashSet<>(outputLocales), translationEngineParams));
-    return 0;
+        translationService.translate(
+            entries, inputLocale, new HashSet<>(outputLocales), translationEngineParams));
+    return ExitCode.OK;
   }
 }
