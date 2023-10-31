@@ -45,7 +45,7 @@ class LocaleTypeConverterTests {
   @ParameterizedTest
   @ValueSource(strings = {"IT", "en"})
   @DisplayName("Should convert easy languages")
-  void test3(final String value) throws Exception {
+  void test3(final String value) {
     // Given and when
     var res = localeTypeConverter.convert(value);
 
@@ -56,7 +56,7 @@ class LocaleTypeConverterTests {
   @ParameterizedTest
   @ValueSource(strings = {"NSO", "Mtei", "KRI"})
   @DisplayName("Should convert complex languages")
-  void test4(final String value) throws Exception {
+  void test4(final String value) {
     // Given and when
     var res = localeTypeConverter.convert(value);
 

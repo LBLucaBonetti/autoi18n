@@ -102,6 +102,11 @@
       <groupId>io.quarkus</groupId>
     </dependency>
     <dependency>
+      <artifactId>jackson-databind</artifactId>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <version>${jackson.databind.version}</version>
+    </dependency>
+    <dependency>
       <artifactId>lombok</artifactId>
       <groupId>org.projectlombok</groupId>
       <scope>provided</scope>
@@ -289,6 +294,7 @@
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <exec.mainClass>it.lbsoftware.autoi18n.Autoi18n</exec.mainClass>
     <executable-suffix/>
+    <jackson.databind.version>2.15.3</jackson.databind.version>
     <jreleaser-plugin.version>1.8.0</jreleaser-plugin.version>
     <lombok.version>1.18.30</lombok.version>
     <maven.compiler.release>21</maven.compiler.release>

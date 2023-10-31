@@ -1,0 +1,42 @@
+package it.lbsoftware.autoi18n.facade;
+
+import it.lbsoftware.autoi18n.translations.TranslationEngine;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import picocli.CommandLine.ExitCode;
+
+@RequiredArgsConstructor
+public final class TranslationEngineFacade {
+
+  private final TranslationEngine translationEngine;
+  private final Map<String, String> params;
+  private final Map<String, String> entries;
+  private final Locale inputLocale;
+  private final List<Locale> outputLocales;
+
+  /**
+   * Performs a whole translation operation and returns the resulting exit code
+   *
+   * @return The exit code for the whole translation operation
+   */
+  public Integer performTranslation() {
+    var translationEngineParamsValidator = translationEngine.getTranslationEngineParamsValidator();
+    if (!translationEngineParamsValidator.validate(params)) {
+      System.err.println(
+          "Invalid set of parameters for the translation engine "
+              + translationEngine.getName()
+              + ". See <translationEngine> description for more details");
+      return ExitCode.USAGE;
+    }
+    var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
+    var translationEngineParams = translationEngineParamsProvider.provide(params);
+    var translationService = translationEngine.getTranslationService();
+    System.out.println(
+        translationService.translate(
+            entries, inputLocale, new HashSet<>(outputLocales), translationEngineParams));
+    return ExitCode.OK;
+  }
+}

@@ -1,6 +1,7 @@
 package it.lbsoftware.autoi18n;
 
 import it.lbsoftware.autoi18n.constants.Constants;
+import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
 
 public final class TestUtils {
 
@@ -38,5 +39,17 @@ public final class TestUtils {
 
   public static String optionLongOutputLanguages(final String value) {
     return Constants.OPTION_LONG_OUTPUT_LANGUAGES + "=" + value;
+  }
+
+  public static String optionLongTranslationEngineParams(final String value) {
+    return Constants.OPTION_LONG_TRANSLATION_ENGINE_PARAMS + "=" + value;
+  }
+
+  public static String requiredTranslationEngineParamsForDefaultTranslationEngine() {
+    return optionLongTranslationEngineParams(
+        TranslationEngineParams.API_KEY_PARAM
+            + "=fake-api-key,"
+            + TranslationEngineParams.PROJECT_NUMBER_OR_ID_PARAM
+            + "=project-number-or-id");
   }
 }
