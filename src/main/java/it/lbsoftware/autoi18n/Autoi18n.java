@@ -71,13 +71,13 @@ public class Autoi18n implements Callable<Integer> {
   @Option(
       names = {OPTION_SHORT_TRANSLATION_ENGINE, OPTION_LONG_TRANSLATION_ENGINE},
       required = false,
-      description =
-          """
-The translation engine to use; the following engines are actually available:
-- Google Cloud Translation v3
-  Parameters via --translation-engine-params:
-  api-key: the API key to use
-  project-number-or-id: the Google Cloud project or id to use""",
+      description = {
+        "The translation engine to use; the following engines are actually available:",
+        "* Google Cloud Translation v3",
+        "  Parameters via --translation-engine-params:",
+        "  * api-key: the API key to use",
+        "  * project-number-or-id: the Google Cloud project or id to use"
+      },
       paramLabel = "<translationEngine>")
   private TranslationEngine translationEngine = TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3;
 
