@@ -45,7 +45,6 @@ public class GoogleCloudTranslationV3Api {
     try {
       return JacksonConfig.INSTANCE.getObjectMapper().writeValueAsString(translateTextRequest);
     } catch (JsonProcessingException e) {
-      e.printStackTrace();
       System.err.println("Could not convert the request to a meaningful request body");
     }
     return StringUtils.EMPTY;
@@ -55,7 +54,6 @@ public class GoogleCloudTranslationV3Api {
     try {
       return JacksonConfig.INSTANCE.getObjectMapper().readValue(body, TranslateTextResponse.class);
     } catch (JsonProcessingException e) {
-      e.printStackTrace();
       System.err.println("Could not convert the response body to a meaningful response");
     }
     return new TranslateTextResponse(Collections.emptyList());
