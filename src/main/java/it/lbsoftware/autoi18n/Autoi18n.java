@@ -12,10 +12,10 @@ import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_OUTPUT_LAN
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_TRANSLATION_ENGINE;
 
 import it.lbsoftware.autoi18n.converters.LocaleTypeConverter;
+import it.lbsoftware.autoi18n.facade.TranslationEngineFacade;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.VersionProvider;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -23,7 +23,6 @@ import java.util.concurrent.Callable;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
@@ -78,8 +77,7 @@ The translation engine to use; the following engines are actually available:
 - Google Cloud Translation v3
   Parameters via --translation-engine-params:
   api-key: the API key to use
-  project-number-or-id: the Google Cloud project or id to use
-""",
+  project-number-or-id: the Google Cloud project or id to use""",
       paramLabel = "<translationEngine>")
   private TranslationEngine translationEngine = TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3;
 
@@ -99,20 +97,8 @@ The translation engine to use; the following engines are actually available:
 
   @Override
   public Integer call() {
-    var translationEngineParamsValidator = translationEngine.getTranslationEngineParamsValidator();
-    if (!translationEngineParamsValidator.validate(params)) {
-      System.err.println(
-          "Invalid set of parameters for the translation engine "
-              + translationEngine.getName()
-              + ". See <translationEngine> description for more details");
-      return ExitCode.USAGE;
-    }
-    var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
-    var translationEngineParams = translationEngineParamsProvider.provide(params);
-    var translationService = translationEngine.getTranslationService();
-    System.out.println(
-        translationService.translate(
-            entries, inputLocale, new HashSet<>(outputLocales), translationEngineParams));
-    return ExitCode.OK;
+    return new TranslationEngineFacade(
+            translationEngine, params, entries, inputLocale, outputLocales)
+        .performTranslation();
   }
 }
