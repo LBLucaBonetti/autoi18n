@@ -150,7 +150,7 @@ class Autoi18nTests {
   }
 
   @Test
-  @DisplayName("Should pick multiple output languages")
+  @DisplayName("Should pick multiple output language and countries")
   void test6() {
     // Given
     var lan1 = "en-US";
@@ -168,10 +168,13 @@ class Autoi18nTests {
 
     // Then
     assertEquals(ExitCode.OK, exitCode);
-    var outputLocales = autoi18n.getOutputLocales();
-    assertEquals(outputLanguageArgsLength, outputLocales.size());
+    var outputLanguageAndCountries = autoi18n.getOutputLanguageAndCountries();
+    assertEquals(outputLanguageArgsLength, outputLanguageAndCountries.size());
     assertEquals(
-        lan1, outputLocales.getFirst().getLanguage() + "-" + outputLocales.getFirst().getCountry());
-    assertEquals(lan2, outputLocales.getLast().getLanguage());
+        lan1,
+        outputLanguageAndCountries.getFirst().language()
+            + "-"
+            + outputLanguageAndCountries.getFirst().country());
+    assertEquals(lan2, outputLanguageAndCountries.getLast().language());
   }
 }

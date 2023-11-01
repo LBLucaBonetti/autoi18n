@@ -11,13 +11,13 @@ import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_INPUT_LANG
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_OUTPUT_LANGUAGES;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_TRANSLATION_ENGINE;
 
-import it.lbsoftware.autoi18n.converters.LocaleTypeConverter;
+import it.lbsoftware.autoi18n.converters.LanguageAndCountryTypeConverter;
 import it.lbsoftware.autoi18n.facade.TranslationEngineFacade;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
+import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import it.lbsoftware.autoi18n.utils.VersionProvider;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import lombok.Getter;
@@ -39,18 +39,18 @@ public class Autoi18n implements Callable<Integer> {
       required = true,
       description =
           "The target languages, according to the ISO 639 alpha-2 or alpha-3 standard, case insensitive.",
-      paramLabel = "<output-language>",
+      paramLabel = "<output-language-and-country>",
       split = ",",
       splitSynopsisLabel = ",",
-      converter = LocaleTypeConverter.class)
-  private List<Locale> outputLocales;
+      converter = LanguageAndCountryTypeConverter.class)
+  private List<LanguageAndCountry> outputLanguageAndCountries;
 
   @Getter
   @Option(
       names = {OPTION_SHORT_ENTRY, OPTION_LONG_ENTRY},
       required = true,
       description =
-          "Key-value item(s) to translate; if multiple key-value pairs are specified, they need to share a common source language (<input-language> option); an unspecified or blank value will not be translated nor inserted into language files; whenever an error occurs during the translation of one or multiple entries, the resulting output string will be empty",
+          "Key-value item(s) to translate; if multiple key-value pairs are specified, they need to share a common source language (<input-language-and-country> option); an unspecified or blank value will not be translated nor inserted into language files; whenever an error occurs during the translation of one or multiple entries, the resulting output string will be empty.",
       paramLabel = "<key>=<value>",
       mapFallbackValue = StringUtils.EMPTY,
       split = ",",
@@ -63,9 +63,9 @@ public class Autoi18n implements Callable<Integer> {
       required = true,
       description =
           "The source language, according to the ISO 639 alpha-2 or alpha-3 standard, case insensitive.",
-      paramLabel = "<input-language>",
-      converter = LocaleTypeConverter.class)
-  private Locale inputLocale;
+      paramLabel = "<input-language-and-country>",
+      converter = LanguageAndCountryTypeConverter.class)
+  private LanguageAndCountry inputLanguageAndCountry;
 
   @Getter
   @Option(
@@ -76,7 +76,7 @@ public class Autoi18n implements Callable<Integer> {
         "* Google Cloud Translation v3",
         "  Parameters via --translation-engine-params:",
         "  * api-key: the API key to use",
-        "  * project-number-or-id: the Google Cloud project or id to use"
+        "  * project-number-or-id: the Google Cloud project number or id to use"
       },
       paramLabel = "<translationEngine>")
   private TranslationEngine translationEngine = TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3;
@@ -86,7 +86,7 @@ public class Autoi18n implements Callable<Integer> {
       names = {OPTION_LONG_TRANSLATION_ENGINE_PARAMS},
       required = false,
       description =
-          "Additional key-value pairs to customize the translation engine; see <translationEngine> description for more details",
+          "Additional key-value pairs to customize the translation engine; see <translationEngine> description for more details.",
       paramLabel = "<key>=<value>",
       mapFallbackValue = StringUtils.EMPTY,
       split = ",",
@@ -98,7 +98,7 @@ public class Autoi18n implements Callable<Integer> {
   @Override
   public Integer call() {
     return new TranslationEngineFacade(
-            translationEngine, params, entries, inputLocale, outputLocales)
+            translationEngine, params, entries, inputLanguageAndCountry, outputLanguageAndCountries)
         .performTranslation();
   }
 }

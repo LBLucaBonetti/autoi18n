@@ -1,4 +1,4 @@
-package it.lbsoftware.autoi18n.converters;
+package it.lbsoftware.autoi18n.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;

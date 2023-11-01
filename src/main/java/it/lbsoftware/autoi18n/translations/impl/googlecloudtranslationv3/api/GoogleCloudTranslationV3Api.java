@@ -1,7 +1,7 @@
 package it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import it.lbsoftware.autoi18n.converters.JacksonConfig;
+import it.lbsoftware.autoi18n.config.JacksonConfig;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.TranslateTextRequest;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.TranslateTextResponse;
 import java.io.IOException;

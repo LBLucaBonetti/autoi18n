@@ -1,14 +1,13 @@
 package it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3;
 
-import it.lbsoftware.autoi18n.converters.LocaleTypeConverter;
 import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.translations.TranslationService;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.api.GoogleCloudTranslationV3Api;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.TranslateTextRequest;
+import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -18,24 +17,28 @@ import org.apache.commons.lang3.StringUtils;
 public class GoogleCloudTranslationV3 implements TranslationService {
 
   @Override
-  public Map<Locale, Map<String, String>> translate(
+  public Map<LanguageAndCountry, Map<String, String>> translate(
       @NonNull final Map<String, String> entries,
-      @NonNull final Locale inputLocale,
-      @NonNull final Set<Locale> outputLocales,
+      @NonNull final LanguageAndCountry inputLanguageAndCountry,
+      @NonNull final Set<LanguageAndCountry> outputLanguageAndCountries,
       @NonNull final TranslationEngineParams translationEngineParams) {
-    var translations = new HashMap<Locale, Map<String, String>>();
-    outputLocales.forEach(
-        (Locale outputLocale) ->
+    var translations = new HashMap<LanguageAndCountry, Map<String, String>>();
+    outputLanguageAndCountries.forEach(
+        (LanguageAndCountry outputLanguageAndCountry) ->
             translations.put(
-                outputLocale,
-                translate(entries, inputLocale, outputLocale, translationEngineParams)));
+                outputLanguageAndCountry,
+                translate(
+                    entries,
+                    inputLanguageAndCountry,
+                    outputLanguageAndCountry,
+                    translationEngineParams)));
     return translations;
   }
 
   private Map<String, String> translate(
       final Map<String, String> entries,
-      final Locale inputLocale,
-      final Locale outputLocale,
+      final LanguageAndCountry inputLanguageAndCountry,
+      final LanguageAndCountry outputLanguageAndCountry,
       final TranslationEngineParams translationEngineParams) {
     var translations = new HashMap<String, String>();
     entries.forEach(
@@ -44,17 +47,21 @@ public class GoogleCloudTranslationV3 implements TranslationService {
                 key,
                 StringUtils.isBlank(value)
                     ? StringUtils.EMPTY
-                    : translate(value, inputLocale, outputLocale, translationEngineParams)));
+                    : translate(
+                        value,
+                        inputLanguageAndCountry,
+                        outputLanguageAndCountry,
+                        translationEngineParams)));
     return translations;
   }
 
   private String translate(
       final String entry,
-      final Locale inputLocale,
-      final Locale outputLocale,
+      final LanguageAndCountry inputLanguageAndCountry,
+      final LanguageAndCountry outputLanguageAndCountry,
       final TranslationEngineParams translationEngineParams) {
-    String inputLanguage = LocaleTypeConverter.getLanguageAndRegion(inputLocale);
-    String outputLanguage = LocaleTypeConverter.getLanguageAndRegion(outputLocale);
+    String inputLanguage = inputLanguageAndCountry.toString();
+    String outputLanguage = outputLanguageAndCountry.toString();
     if (Stream.of(inputLanguage, outputLanguage).allMatch(StringUtils::isNotBlank)) {
       return translate(entry, inputLanguage, outputLanguage, translationEngineParams);
     }
