@@ -3,11 +3,13 @@ package it.lbsoftware.autoi18n.utils;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
-public record LanguageAndCountry(String language, String country) {
-
+public class LanguageAndCountry {
   private static final Pattern ISO639 = Pattern.compile("^[a-zA-Z]{2}$");
+  @Getter private final String language;
+  @Getter private final String country;
 
   public LanguageAndCountry(final String language, final String country) {
     // The language is traditionally lowercase and is required

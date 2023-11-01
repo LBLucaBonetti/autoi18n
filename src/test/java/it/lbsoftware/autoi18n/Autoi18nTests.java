@@ -172,9 +172,9 @@ class Autoi18nTests {
     assertEquals(outputLanguageArgsLength, outputLanguageAndCountries.size());
     assertEquals(
         lan1,
-        outputLanguageAndCountries.getFirst().language()
+        outputLanguageAndCountries.getFirst().getLanguage()
             + "-"
-            + outputLanguageAndCountries.getFirst().country());
-    assertEquals(lan2, outputLanguageAndCountries.getLast().language());
+            + outputLanguageAndCountries.getFirst().getCountry());
+    assertEquals(lan2, outputLanguageAndCountries.getLast().getLanguage());
   }
 }
