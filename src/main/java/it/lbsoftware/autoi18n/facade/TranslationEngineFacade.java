@@ -1,9 +1,9 @@
 package it.lbsoftware.autoi18n.facade;
 
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
+import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import picocli.CommandLine.ExitCode;
@@ -14,8 +14,8 @@ public final class TranslationEngineFacade {
   private final TranslationEngine translationEngine;
   private final Map<String, String> params;
   private final Map<String, String> entries;
-  private final Locale inputLocale;
-  private final List<Locale> outputLocales;
+  private final LanguageAndCountry inputLanguageAndCountry;
+  private final List<LanguageAndCountry> outputLanguageAndCountries;
 
   /**
    * Performs a whole translation operation and returns the resulting exit code
@@ -36,7 +36,10 @@ public final class TranslationEngineFacade {
     var translationService = translationEngine.getTranslationService();
     System.out.println(
         translationService.translate(
-            entries, inputLocale, new HashSet<>(outputLocales), translationEngineParams));
+            entries,
+            inputLanguageAndCountry,
+            new HashSet<>(outputLanguageAndCountries),
+            translationEngineParams));
     return ExitCode.OK;
   }
 }
