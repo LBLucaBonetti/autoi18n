@@ -40,6 +40,7 @@ public final class TranslationEngineFacade {
             .collect(Collectors.toSet());
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
     System.out.println("Detected output languages: " + outputLanguageAndCountriesNoDuplicates);
+    System.out.println("Detected entries: " + entries);
     System.out.println("Translation engine: " + translationEngine.getName());
     System.out.println(
         translationService.translate(

@@ -87,10 +87,10 @@ class Autoi18nTests {
       optionLongEntry("key4=value4"),
       optionLongEntry("key5"),
       optionLongEntry("key6="),
-      optionShortEntry("key7=value7,key8=value8"),
+      optionShortEntry("key4=value7"),
       requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
-    int entryArgsLength = args.length - 2;
+    int entryArgsLength = args.length - 4;
 
     var exitCode = commandLine.execute(args);
 
@@ -101,7 +101,7 @@ class Autoi18nTests {
     assertEquals("value1", entries.get("key1"));
     assertEquals(StringUtils.EMPTY, entries.get("key2"));
     assertEquals(StringUtils.EMPTY, entries.get("key3"));
-    assertEquals("value4", entries.get("key4"));
+    assertEquals("value7", entries.get("key4"));
     assertEquals(StringUtils.EMPTY, entries.get("key5"));
     assertEquals(StringUtils.EMPTY, entries.get("key6"));
   }

@@ -50,11 +50,9 @@ public class Autoi18n implements Callable<Integer> {
       names = {OPTION_SHORT_ENTRY, OPTION_LONG_ENTRY},
       required = true,
       description =
-          "Key-value item(s) to translate; if multiple key-value pairs are specified, they need to share a common source language (<input-language-and-country> option); an unspecified or blank value will not be translated nor inserted into language files; whenever an error occurs during the translation of one or multiple entries, the resulting output string will be empty.",
+          "Key-value item(s) to translate; if multiple key-value pairs are specified, they need to share a common source language (<input-language-and-country> option); an unspecified or blank value will not be translated nor inserted into language files; whenever an error occurs during the translation of one or multiple entries, the resulting output strings will be empty.",
       paramLabel = "<key>=<value>",
-      mapFallbackValue = StringUtils.EMPTY,
-      split = ",",
-      splitSynopsisLabel = ",")
+      mapFallbackValue = StringUtils.EMPTY)
   private Map<String, String> entries;
 
   @Getter
