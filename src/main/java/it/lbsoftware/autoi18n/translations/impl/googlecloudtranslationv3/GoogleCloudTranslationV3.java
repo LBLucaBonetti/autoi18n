@@ -1,7 +1,6 @@
 package it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3;
 
 import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
-import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.translations.TranslationService;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.api.GoogleCloudTranslationV3Api;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.TranslateTextRequest;
@@ -77,11 +76,7 @@ public class GoogleCloudTranslationV3 implements TranslationService {
       final String outputLanguage,
       final TranslationEngineParams translationEngineParams) {
     System.out.printf(
-        "Connecting to translate %s from %s to %s with %s%n",
-        entry,
-        inputLanguage,
-        outputLanguage,
-        TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3.getName());
+        "Connecting to translate %s from %s to %s%n", entry, inputLanguage, outputLanguage);
     try {
       var translateTextRequest =
           new TranslateTextRequest(List.of(entry), inputLanguage, outputLanguage);

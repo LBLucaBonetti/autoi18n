@@ -2,9 +2,9 @@ package it.lbsoftware.autoi18n.facade;
 
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import picocli.CommandLine.ExitCode;
 
@@ -34,11 +34,18 @@ public final class TranslationEngineFacade {
     var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
     var translationEngineParams = translationEngineParamsProvider.provide(params);
     var translationService = translationEngine.getTranslationService();
+    var outputLanguageAndCountriesNoDuplicates =
+        outputLanguageAndCountries.stream()
+            .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
+            .collect(Collectors.toSet());
+    System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
+    System.out.println("Detected output languages: " + outputLanguageAndCountriesNoDuplicates);
+    System.out.println("Translation engine: " + translationEngine.getName());
     System.out.println(
         translationService.translate(
             entries,
             inputLanguageAndCountry,
-            new HashSet<>(outputLanguageAndCountries),
+            outputLanguageAndCountriesNoDuplicates,
             translationEngineParams));
     return ExitCode.OK;
   }
