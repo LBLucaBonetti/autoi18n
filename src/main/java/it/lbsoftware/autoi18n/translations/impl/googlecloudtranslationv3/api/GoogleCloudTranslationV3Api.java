@@ -10,7 +10,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
-import java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 
 public class GoogleCloudTranslationV3Api {
@@ -38,7 +37,7 @@ public class GoogleCloudTranslationV3Api {
       System.err.println("Operation interrupted");
       Thread.currentThread().interrupt();
     }
-    return new TranslateTextResponse(Collections.emptyList());
+    return TranslateTextResponse.EMPTY;
   }
 
   private String requestToBody(final TranslateTextRequest translateTextRequest) {
@@ -56,6 +55,6 @@ public class GoogleCloudTranslationV3Api {
     } catch (JsonProcessingException e) {
       System.err.println("Could not convert the response body to a meaningful response");
     }
-    return new TranslateTextResponse(Collections.emptyList());
+    return TranslateTextResponse.EMPTY;
   }
 }
