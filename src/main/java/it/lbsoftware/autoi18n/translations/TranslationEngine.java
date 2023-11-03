@@ -21,7 +21,7 @@ public enum TranslationEngine {
       new GoogleCloudTranslationV3ParamsValidator(),
       new GoogleCloudTranslationV3ParamsProvider()),
   LIBRE_TRANSLATE(
-      "LibreTranslate",
+      "LibreTranslate (expected to run locally @ localhost:5000)",
       new LibreTranslate(),
       new LibreTranslateParamsValidator(),
       new LibreTranslateParamsProvider());
