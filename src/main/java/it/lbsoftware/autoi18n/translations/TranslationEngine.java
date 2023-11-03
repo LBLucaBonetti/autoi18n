@@ -2,9 +2,12 @@ package it.lbsoftware.autoi18n.translations;
 
 import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParamsProvider;
 import it.lbsoftware.autoi18n.paramsproviders.impl.googlecloudtranslationv3.GoogleCloudTranslationV3ParamsProvider;
+import it.lbsoftware.autoi18n.paramsproviders.impl.libretranslate.LibreTranslateParamsProvider;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.GoogleCloudTranslationV3;
+import it.lbsoftware.autoi18n.translations.impl.libretranslate.LibreTranslate;
 import it.lbsoftware.autoi18n.validators.TranslationEngineParamsValidator;
 import it.lbsoftware.autoi18n.validators.impl.googlecloudtranslationv3.GoogleCloudTranslationV3ParamsValidator;
+import it.lbsoftware.autoi18n.validators.impl.libretranslate.LibreTranslateParamsValidator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +19,12 @@ public enum TranslationEngine {
       "Google Cloud Translation v3",
       new GoogleCloudTranslationV3(),
       new GoogleCloudTranslationV3ParamsValidator(),
-      new GoogleCloudTranslationV3ParamsProvider());
+      new GoogleCloudTranslationV3ParamsProvider()),
+  LIBRE_TRANSLATE(
+      "LibreTranslate",
+      new LibreTranslate(),
+      new LibreTranslateParamsValidator(),
+      new LibreTranslateParamsProvider());
 
   private final String name;
   private final TranslationService translationService;

@@ -71,10 +71,13 @@ public class Autoi18n implements Callable<Integer> {
       required = false,
       description = {
         "The translation engine to use; the following engines are actually available:",
-        "* Google Cloud Translation v3",
+        "* GOOGLE_CLOUD_TRANSLATION_V3",
         "  Parameters via --translation-engine-params:",
         "  * api-key: the API key to use",
-        "  * project-number-or-id: the Google Cloud project number or id to use"
+        "  * project-number-or-id: the Google Cloud project number or id to use",
+        "* LIBRE_TRANSLATE",
+        "  Parameters via --translation-engine-params:",
+        "  <no parameters required>"
       },
       paramLabel = "<translationEngine>")
   private TranslationEngine translationEngine = TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3;
