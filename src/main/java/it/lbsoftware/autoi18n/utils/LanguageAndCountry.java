@@ -6,10 +6,11 @@ import java.util.regex.Pattern;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+@Getter
 public class LanguageAndCountry {
   private static final Pattern ISO639 = Pattern.compile("^[a-zA-Z]{2}$");
-  @Getter private final String language;
-  @Getter private final String country;
+  private final String language;
+  private final String country;
 
   public LanguageAndCountry(final String language, final String country) {
     // The language is traditionally lowercase and is required
