@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
-public class LibreTranslate
+public final class LibreTranslate
     extends AbstractTranslationService<LibreTranslateResponse, LibreTranslateRequest> {
 
   public LibreTranslate() {
