@@ -1,33 +1,30 @@
-package it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3;
+package it.lbsoftware.autoi18n.translations.impl.libretranslate;
 
 import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
 import it.lbsoftware.autoi18n.translations.AbstractTranslationService;
-import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.api.GoogleCloudTranslationV3Api;
-import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.GoogleCloudTranslationV3Request;
-import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.GoogleCloudTranslationV3Response;
+import it.lbsoftware.autoi18n.translations.impl.libretranslate.api.LibreTranslateApi;
+import it.lbsoftware.autoi18n.translations.impl.libretranslate.pojos.LibreTranslateRequest;
+import it.lbsoftware.autoi18n.translations.impl.libretranslate.pojos.LibreTranslateResponse;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
-public final class GoogleCloudTranslationV3
-    extends AbstractTranslationService<
-        GoogleCloudTranslationV3Response, GoogleCloudTranslationV3Request> {
+public final class LibreTranslateService
+    extends AbstractTranslationService<LibreTranslateResponse, LibreTranslateRequest> {
 
-  public GoogleCloudTranslationV3() {
-    super(new GoogleCloudTranslationV3Api());
+  public LibreTranslateService() {
+    super(new LibreTranslateApi());
   }
 
   @Override
   public Map<LanguageAndCountry, Map<String, String>> translate(
-      @NonNull final Map<String, String> entries,
-      @NonNull final LanguageAndCountry inputLanguageAndCountry,
-      @NonNull final Set<LanguageAndCountry> outputLanguageAndCountries,
-      @NonNull final TranslationEngineParams translationEngineParams) {
+      Map<String, String> entries,
+      LanguageAndCountry inputLanguageAndCountry,
+      Set<LanguageAndCountry> outputLanguageAndCountries,
+      TranslationEngineParams translationEngineParams) {
     var translations = new HashMap<LanguageAndCountry, Map<String, String>>();
     outputLanguageAndCountries.forEach(
         (LanguageAndCountry outputLanguageAndCountry) ->
@@ -66,8 +63,8 @@ public final class GoogleCloudTranslationV3
       final LanguageAndCountry inputLanguageAndCountry,
       final LanguageAndCountry outputLanguageAndCountry,
       final TranslationEngineParams translationEngineParams) {
-    String inputLanguage = inputLanguageAndCountry.toString();
-    String outputLanguage = outputLanguageAndCountry.toString();
+    String inputLanguage = inputLanguageAndCountry.getLanguage();
+    String outputLanguage = outputLanguageAndCountry.getLanguage();
     if (Stream.of(inputLanguage, outputLanguage).allMatch(StringUtils::isNotBlank)) {
       return translate(entry, inputLanguage, outputLanguage, translationEngineParams);
     }
@@ -85,11 +82,10 @@ public final class GoogleCloudTranslationV3
     System.out.printf(
         "Connecting to translate %s from %s to %s%n", entry, inputLanguage, outputLanguage);
     try {
-      var translateTextRequest =
-          new GoogleCloudTranslationV3Request(List.of(entry), inputLanguage, outputLanguage);
+      var translateTextRequest = new LibreTranslateRequest(entry, inputLanguage, outputLanguage);
       var translateTextResponse =
           translationApi.translate(translationEngineParams, translateTextRequest);
-      return translateTextResponse.translations().get(0).translatedText();
+      return translateTextResponse.translatedText();
     } catch (Exception e) {
       System.err.printf(
           "Error translating %s from %s to %s%n", entry, inputLanguage, outputLanguage);
