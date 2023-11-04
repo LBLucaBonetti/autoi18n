@@ -2,7 +2,7 @@ package it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3;
 
 import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
 import it.lbsoftware.autoi18n.translations.AbstractTranslationService;
-import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.api.GoogleCloudTranslationV3Api;
+import it.lbsoftware.autoi18n.translations.TranslationApi;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.GoogleCloudTranslationV3Request;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.GoogleCloudTranslationV3Response;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
@@ -18,8 +18,10 @@ public final class GoogleCloudTranslationV3Service
     extends AbstractTranslationService<
         GoogleCloudTranslationV3Response, GoogleCloudTranslationV3Request> {
 
-  public GoogleCloudTranslationV3Service() {
-    super(new GoogleCloudTranslationV3Api());
+  public GoogleCloudTranslationV3Service(
+      final TranslationApi<GoogleCloudTranslationV3Response, GoogleCloudTranslationV3Request>
+          translationApi) {
+    super(translationApi);
   }
 
   @Override

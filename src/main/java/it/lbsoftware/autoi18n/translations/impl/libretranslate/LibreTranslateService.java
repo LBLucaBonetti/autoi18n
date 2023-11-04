@@ -2,7 +2,7 @@ package it.lbsoftware.autoi18n.translations.impl.libretranslate;
 
 import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
 import it.lbsoftware.autoi18n.translations.AbstractTranslationService;
-import it.lbsoftware.autoi18n.translations.impl.libretranslate.api.LibreTranslateApi;
+import it.lbsoftware.autoi18n.translations.TranslationApi;
 import it.lbsoftware.autoi18n.translations.impl.libretranslate.pojos.LibreTranslateRequest;
 import it.lbsoftware.autoi18n.translations.impl.libretranslate.pojos.LibreTranslateResponse;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
@@ -15,8 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 public final class LibreTranslateService
     extends AbstractTranslationService<LibreTranslateResponse, LibreTranslateRequest> {
 
-  public LibreTranslateService() {
-    super(new LibreTranslateApi());
+  public LibreTranslateService(
+      final TranslationApi<LibreTranslateResponse, LibreTranslateRequest> translationApi) {
+    super(translationApi);
   }
 
   @Override

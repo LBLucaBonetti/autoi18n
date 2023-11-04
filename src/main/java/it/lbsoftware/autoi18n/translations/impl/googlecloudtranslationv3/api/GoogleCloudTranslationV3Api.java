@@ -3,7 +3,8 @@ package it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import it.lbsoftware.autoi18n.config.JacksonConfig;
 import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
-import it.lbsoftware.autoi18n.translations.TranslationApi;
+import it.lbsoftware.autoi18n.translations.AbstractTranslationApi;
+import it.lbsoftware.autoi18n.translations.HttpClientProvider;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.GoogleCloudTranslationV3Request;
 import it.lbsoftware.autoi18n.translations.impl.googlecloudtranslationv3.pojos.GoogleCloudTranslationV3Response;
 import java.io.IOException;
@@ -15,9 +16,14 @@ import java.net.http.HttpResponse;
 import org.apache.commons.lang3.StringUtils;
 
 public class GoogleCloudTranslationV3Api
-    implements TranslationApi<GoogleCloudTranslationV3Response, GoogleCloudTranslationV3Request> {
+    extends AbstractTranslationApi<
+        GoogleCloudTranslationV3Response, GoogleCloudTranslationV3Request> {
 
   private static final String BASE_URI = "https://translate.googleapis.com/v3/projects";
+
+  public GoogleCloudTranslationV3Api(final HttpClientProvider httpClientProvider) {
+    super(httpClientProvider);
+  }
 
   @Override
   public GoogleCloudTranslationV3Response translate(
@@ -31,7 +37,7 @@ public class GoogleCloudTranslationV3Api
             .header("Authorization", "Bearer " + translationEngineParams.apiKey())
             .header("x-goog-user-project", translationEngineParams.projectNumberOrId())
             .build();
-    try (HttpClient client = HttpClient.newBuilder().build()) {
+    try (HttpClient client = httpClientProvider.get()) {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       return bodyToResponse(response.body());
     } catch (IOException ioException) {
