@@ -123,6 +123,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <artifactId>quarkus-junit5-mockito</artifactId>
+      <groupId>io.quarkus</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <artifactId>quarkus-jacoco</artifactId>
       <groupId>io.quarkus</groupId>
       <scope>test</scope>
