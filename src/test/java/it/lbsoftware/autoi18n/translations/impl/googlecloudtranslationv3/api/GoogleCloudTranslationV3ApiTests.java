@@ -79,4 +79,29 @@ class GoogleCloudTranslationV3ApiTests {
     assertNotNull(res);
     assertEquals(GoogleCloudTranslationV3Response.EMPTY, res);
   }
+
+  @Test
+  @DisplayName("Could throw JsonProcessingException")
+  void test3() throws IOException, InterruptedException {
+    // Given
+    var httpClientProvider = Mockito.mock(GoogleCloudTranslationV3HttpClientProvider.class);
+    HttpClient httpClient = Mockito.mock(HttpClient.class);
+    HttpResponse<String> httpResponse = (HttpResponse<String>) Mockito.mock(HttpResponse.class);
+    var body = "invalid-JSON";
+    when(httpResponse.body()).thenReturn(body);
+    when(httpClientProvider.get()).thenReturn(httpClient);
+    when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+        .thenReturn(httpResponse);
+    var translationApi = new GoogleCloudTranslationV3Api(httpClientProvider);
+
+    // When
+    var res =
+        translationApi.translate(
+            new TranslationEngineParams("fake-api-key", "project-number-or-id"),
+            new GoogleCloudTranslationV3Request(List.of("hello"), "en", "it"));
+
+    // Then
+    assertNotNull(res);
+    assertEquals(GoogleCloudTranslationV3Response.EMPTY, res);
+  }
 }
