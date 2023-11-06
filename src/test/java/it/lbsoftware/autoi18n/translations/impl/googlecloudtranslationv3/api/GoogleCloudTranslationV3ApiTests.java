@@ -81,7 +81,7 @@ class GoogleCloudTranslationV3ApiTests {
   }
 
   @Test
-  @DisplayName("Could throw JsonProcessingException")
+  @DisplayName("Could throw JsonProcessingException when reading response")
   void test3() throws IOException, InterruptedException {
     // Given
     var httpClientProvider = Mockito.mock(GoogleCloudTranslationV3HttpClientProvider.class);
