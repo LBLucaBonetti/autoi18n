@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
 public final class LibreTranslateService
@@ -22,10 +23,10 @@ public final class LibreTranslateService
 
   @Override
   public Map<LanguageAndCountry, Map<String, String>> translate(
-      Map<String, String> entries,
-      LanguageAndCountry inputLanguageAndCountry,
-      Set<LanguageAndCountry> outputLanguageAndCountries,
-      TranslationEngineParams translationEngineParams) {
+      @NonNull final Map<String, String> entries,
+      @NonNull final LanguageAndCountry inputLanguageAndCountry,
+      @NonNull final Set<LanguageAndCountry> outputLanguageAndCountries,
+      @NonNull final TranslationEngineParams translationEngineParams) {
     var translations = new HashMap<LanguageAndCountry, Map<String, String>>();
     outputLanguageAndCountries.forEach(
         (LanguageAndCountry outputLanguageAndCountry) ->
