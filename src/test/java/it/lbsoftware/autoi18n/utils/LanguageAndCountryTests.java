@@ -1,6 +1,8 @@
 package it.lbsoftware.autoi18n.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -89,5 +91,19 @@ class LanguageAndCountryTests {
 
     // Then
     assertTrue(res);
+  }
+
+  @Test
+  @DisplayName("Should not display country if it is not provided")
+  void test6() {
+    // Given
+    var languageAndCountry = new LanguageAndCountry("it", null);
+
+    // When
+    var res = languageAndCountry.toString();
+
+    // Then
+    assertNotNull(res);
+    assertEquals("it", res);
   }
 }
