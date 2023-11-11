@@ -94,16 +94,16 @@ class LanguageAndCountryTests {
   }
 
   @Test
-  @DisplayName("Should not display country if it is not provided")
+  @DisplayName("Should display country if it is provided")
   void test6() {
     // Given
-    var languageAndCountry = new LanguageAndCountry("it", null);
+    var languageAndCountry = new LanguageAndCountry("en", "us");
 
     // When
     var res = languageAndCountry.toString();
 
     // Then
     assertNotNull(res);
-    assertEquals("it", res);
+    assertEquals("en-US", res);
   }
 }
