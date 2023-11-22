@@ -1,10 +1,9 @@
 package it.lbsoftware.autoi18n;
 
-import static it.lbsoftware.autoi18n.TestUtils.optionLongEntry;
-import static it.lbsoftware.autoi18n.TestUtils.optionShortEntry;
-import static it.lbsoftware.autoi18n.TestUtils.optionShortInputLanguage;
-import static it.lbsoftware.autoi18n.TestUtils.optionShortOutputLanguages;
 import static it.lbsoftware.autoi18n.TestUtils.optionShortTranslationEngine;
+import static it.lbsoftware.autoi18n.TestUtils.parameterEntry;
+import static it.lbsoftware.autoi18n.TestUtils.parameterInputLanguage;
+import static it.lbsoftware.autoi18n.TestUtils.parameterOutputLanguages;
 import static it.lbsoftware.autoi18n.TestUtils.requiredTranslationEngineParamsForDefaultTranslationEngine;
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,15 +78,15 @@ class Autoi18nTests {
   void test3() {
     // Given
     String[] args = {
-      optionShortInputLanguage("en"),
-      optionShortOutputLanguages("it"),
-      optionShortEntry("key1=value1"),
-      optionShortEntry("key2"),
-      optionShortEntry("key3="),
-      optionLongEntry("key4=value4"),
-      optionLongEntry("key5"),
-      optionLongEntry("key6="),
-      optionShortEntry("key4=value7"),
+      parameterInputLanguage("en"),
+      parameterOutputLanguages("it"),
+      parameterEntry("key1=value1"),
+      parameterEntry("key2"),
+      parameterEntry("key3="),
+      parameterEntry("key4=value4"),
+      parameterEntry("key5"),
+      parameterEntry("key6="),
+      parameterEntry("key4=value7"),
       requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
     int entryArgsLength = args.length - 4;
@@ -111,13 +110,13 @@ class Autoi18nTests {
   void test4() {
     // Given
     String[] args = {
-      optionShortInputLanguage("en"),
-      optionShortOutputLanguages("it"),
-      optionShortEntry("key=value1"),
-      optionShortEntry("key=value2"),
-      optionShortEntry("key=value3"),
-      optionShortEntry("key="),
-      optionShortEntry("key"),
+      parameterInputLanguage("en"),
+      parameterOutputLanguages("it"),
+      parameterEntry("key=value1"),
+      parameterEntry("key=value2"),
+      parameterEntry("key=value3"),
+      parameterEntry("key="),
+      parameterEntry("key"),
       requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
 
@@ -136,8 +135,9 @@ class Autoi18nTests {
   void test5() {
     // Given
     String[] args = {
-      optionShortInputLanguage("en"),
-      optionShortEntry("key1=value1"),
+      parameterInputLanguage("en"),
+      parameterOutputLanguages("it"),
+      parameterEntry("key1=value1"),
       optionShortTranslationEngine("invalidTranslationEngine")
     };
 
@@ -156,9 +156,9 @@ class Autoi18nTests {
     var lan1 = "en-US";
     var lan2 = "it";
     String[] args = {
-      optionShortInputLanguage("en"),
-      optionShortOutputLanguages(lan1 + "," + lan2),
-      optionShortEntry("key1=value1"),
+      parameterInputLanguage("en"),
+      parameterOutputLanguages(lan1 + "," + lan2),
+      parameterEntry("key1=value1"),
       requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
     int outputLanguageArgsLength = 2;
