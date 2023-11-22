@@ -31,6 +31,10 @@ public final class TranslationEngineFacade {
               + ". See <translationEngine> description for more details");
       return ExitCode.USAGE;
     }
+    if (entries == null) {
+      System.err.println("No entries to translate; operation aborted");
+      return ExitCode.USAGE;
+    }
     var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
     var translationEngineParams = translationEngineParamsProvider.provide(params);
     var translationService = translationEngine.getTranslationService();
