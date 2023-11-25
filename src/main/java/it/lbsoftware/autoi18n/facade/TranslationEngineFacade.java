@@ -1,11 +1,13 @@
 package it.lbsoftware.autoi18n.facade;
 
+import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundlesRetrieverService;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import picocli.CommandLine.ExitCode;
 
 @RequiredArgsConstructor
@@ -42,6 +44,10 @@ public final class TranslationEngineFacade {
         outputLanguageAndCountries.stream()
             .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
             .collect(Collectors.toSet());
+    var propertyResourceBundles =
+        new PropertyResourceBundlesRetrieverService(
+                outputLanguageAndCountriesNoDuplicates, FileUtils.current())
+            .retrieve();
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
     System.out.println("Detected output languages: " + outputLanguageAndCountriesNoDuplicates);
     System.out.println("Detected entries: " + entries);

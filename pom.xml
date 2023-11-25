@@ -117,6 +117,11 @@
       <version>${commons.lang3.version}</version>
     </dependency>
     <dependency>
+      <artifactId>commons-io</artifactId>
+      <groupId>commons-io</groupId>
+      <version>${commons.io.version}</version>
+    </dependency>
+    <dependency>
       <artifactId>quarkus-junit5</artifactId>
       <groupId>io.quarkus</groupId>
       <scope>test</scope>
@@ -279,7 +284,7 @@
               <dependency>
                 <artifactId>commons-io</artifactId>
                 <groupId>commons-io</groupId>
-                <version>${commons-io.version}</version>
+                <version>${commons.io.version}</version>
               </dependency>
             </dependencies>
             <groupId>org.jreleaser</groupId>
@@ -293,7 +298,7 @@
   <properties>
     <artifactsDir>target/distributions</artifactsDir>
     <assembly-plugin.version>3.6.0</assembly-plugin.version>
-    <commons-io.version>2.15.0</commons-io.version>
+    <commons.io.version>2.15.0</commons.io.version>
     <commons.lang3.version>3.14.0</commons.lang3.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <exec.mainClass>it.lbsoftware.autoi18n.Autoi18n</exec.mainClass>
