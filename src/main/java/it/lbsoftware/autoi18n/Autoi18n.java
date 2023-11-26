@@ -32,7 +32,7 @@ public class Autoi18n implements Callable<Integer> {
   @Parameters(
       index = "1",
       description =
-          "The target languages, according to the ISO 639 alpha-2 or alpha-3 standard, case insensitive.",
+          "The target languages, according to the ISO 639 alpha-2 or alpha-3 standard, case insensitive; beware that no checks are carried out beforehand to verify that the chosen translation engine effectively supports this language.",
       paramLabel = "<output-language-and-country>",
       split = ",",
       splitSynopsisLabel = ",",
@@ -52,7 +52,7 @@ public class Autoi18n implements Callable<Integer> {
   @Parameters(
       index = "0",
       description =
-          "The source language, according to the ISO 639 alpha-2 or alpha-3 standard, case insensitive.",
+          "The source language, according to the ISO 639 alpha-2 or alpha-3 standard, case insensitive; beware that no checks are carried out beforehand to verify that the chosen translation engine effectively supports this language.",
       paramLabel = "<input-language-and-country>",
       converter = LanguageAndCountryTypeConverter.class)
   private LanguageAndCountry inputLanguageAndCountry;

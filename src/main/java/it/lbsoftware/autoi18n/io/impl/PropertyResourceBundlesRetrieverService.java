@@ -3,10 +3,12 @@ package it.lbsoftware.autoi18n.io.impl;
 import it.lbsoftware.autoi18n.io.PropertyResourceBundlesRetriever;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.io.File;
-import java.util.Collection;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,41 +19,69 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 public class PropertyResourceBundlesRetrieverService implements PropertyResourceBundlesRetriever {
 
-  public static final Set<String> POSSIBLE_NAMES =
-      Set.of("label", "labels", "language", "languages", "translation", "translations");
-  private final Set<LanguageAndCountry> outputLanguageAndCountries;
-  private final File baseDirectory;
-
-  public PropertyResourceBundlesRetrieverService(
-      final Set<LanguageAndCountry> outputLanguageAndCountries, final File baseDirectory) {
-    this.outputLanguageAndCountries = outputLanguageAndCountries;
-    this.baseDirectory =
-        Optional.ofNullable(baseDirectory).filter(File::isDirectory).orElseGet(FileUtils::current);
-  }
+  public static final String POSSIBLE_NAMES =
+      String.join(
+          "|", Set.of("label", "labels", "language", "languages", "translation", "translations"));
 
   @Override
-  public Map<LanguageAndCountry, ResourceBundle> retrieve() {
+  public Map<LanguageAndCountry, ResourceBundle> retrieve(
+      final Set<LanguageAndCountry> outputLanguageAndCountries, final File baseDirectory) {
+    final File validatedBaseDirectory =
+        Optional.ofNullable(baseDirectory).filter(File::isDirectory).orElseGet(FileUtils::current);
     Map<LanguageAndCountry, ResourceBundle> propertyResourceBundles = new HashMap<>();
-    retrieve(POSSIBLE_NAMES, outputLanguageAndCountries).forEach(System.out::println);
+    outputLanguageAndCountries.forEach(
+        (LanguageAndCountry outputLanguageAndCountry) -> {
+          var files = retrieve(outputLanguageAndCountry, validatedBaseDirectory);
+          if (files.isEmpty()) {
+            System.out.println("No file found for language " + outputLanguageAndCountry);
+            return;
+          }
+          if (files.size() > 1) {
+            System.out.println(
+                "Multiple files found for "
+                    + outputLanguageAndCountry
+                    + " language: "
+                    + files.stream().map(File::getAbsolutePath).collect(Collectors.joining(", ")));
+            return;
+          }
+          var file = files.stream().findFirst().get();
+          getResourceBundle(file)
+              .ifPresentOrElse(
+                  (ResourceBundle resourceBundle) -> {
+                    System.out.println(
+                        "Found Property Resource Bundle file "
+                            + file.getAbsolutePath()
+                            + " for language "
+                            + outputLanguageAndCountry);
+                    propertyResourceBundles.put(outputLanguageAndCountry, resourceBundle);
+                  },
+                  () ->
+                      System.out.println(
+                          "No valid Property Resource Bundle file found for language"
+                              + outputLanguageAndCountry));
+        });
     return propertyResourceBundles;
   }
 
+  private Optional<ResourceBundle> getResourceBundle(final File file) {
+    try {
+      return Optional.of(new PropertyResourceBundle(Files.newInputStream(file.toPath())));
+    } catch (IOException | NullPointerException | IllegalArgumentException e) {
+      return Optional.empty();
+    }
+  }
+
   /**
-   * Finds files that can be read and written whose names are among the possible names and that
-   * indicate translations for an output language
+   * Finds files that can be read and written whose names are among the possible names, and that
+   * indicate translations for the provided output language
    *
-   * @param possibleNames The possible names for the files; it does not indicate the full name of
-   *     the file, but the first part (i.e.: "labels" with english language will match a file named
-   *     "labels_EN.properties" or "labels-EN.properties")
-   * @param outputLanguageAndCountries The output languages to translate to
-   * @return A collection of files matching the conditions
+   * @param outputLanguageAndCountry The output language to translate to
+   * @return The files matching the conditions, or an empty set
    */
-  public Collection<File> retrieve(
-      final Set<String> possibleNames, final Set<LanguageAndCountry> outputLanguageAndCountries) {
+  public Set<File> retrieve(
+      final LanguageAndCountry outputLanguageAndCountry, final File baseDirectory) {
     return FileUtils.listFiles(
-            baseDirectory,
-            getIOFileFilter(possibleNames, outputLanguageAndCountries),
-            TrueFileFilter.INSTANCE)
+            baseDirectory, getIOFileFilter(outputLanguageAndCountry), TrueFileFilter.INSTANCE)
         .stream()
         .filter(this::canReadAndWrite)
         .collect(Collectors.toSet());
@@ -65,18 +95,8 @@ public class PropertyResourceBundlesRetrieverService implements PropertyResource
     }
   }
 
-  private IOFileFilter getIOFileFilter(
-      final Set<String> possibleNames, final Set<LanguageAndCountry> outputLanguageAndCountries) {
-    var pattern =
-        "(?i)("
-            + String.join("|", possibleNames)
-            + ")(_|-)("
-            + String.join(
-                "|",
-                outputLanguageAndCountries.stream()
-                    .map(LanguageAndCountry::toString)
-                    .collect(Collectors.toSet()))
-            + ").properties";
+  private IOFileFilter getIOFileFilter(final LanguageAndCountry outputLanguageAndCountry) {
+    var pattern = "(?i)(" + POSSIBLE_NAMES + ")(_|-)" + outputLanguageAndCountry + ".properties";
     return new RegexFileFilter(pattern);
   }
 }

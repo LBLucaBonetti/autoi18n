@@ -45,11 +45,14 @@ public final class TranslationEngineFacade {
             .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
             .collect(Collectors.toSet());
     var propertyResourceBundles =
-        new PropertyResourceBundlesRetrieverService(
-                outputLanguageAndCountriesNoDuplicates, FileUtils.current())
-            .retrieve();
+        new PropertyResourceBundlesRetrieverService()
+            .retrieve(outputLanguageAndCountriesNoDuplicates, FileUtils.current());
+    var outputLanguageAndCountriesWithValidPropertyResourceBundles =
+        propertyResourceBundles.keySet();
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
-    System.out.println("Detected output languages: " + outputLanguageAndCountriesNoDuplicates);
+    System.out.println(
+        "Output languages with valid Property Resource Bundle file: "
+            + outputLanguageAndCountriesWithValidPropertyResourceBundles);
     System.out.println("Detected entries: " + entries);
     System.out.println("Translation engine: " + translationEngine.getName());
     System.out.println(

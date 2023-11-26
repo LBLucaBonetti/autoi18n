@@ -1,8 +1,10 @@
 package it.lbsoftware.autoi18n.io;
 
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
+import java.io.File;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public interface PropertyResourceBundlesRetriever {
 
@@ -19,13 +21,18 @@ public interface PropertyResourceBundlesRetriever {
    *   <li>The resource bundle file is checked for read and write operations and if it is not
    *       readable and/or writeable, or it is not a valid resource bundle, it is considered as not
    *       found
-   *   <li>If the resource bundle is still not found for a given language, then the entry will not
-   *       be put in the output map, so the output map will lack a key-value pair for that language
+   *   <li>If the resource bundle is not found for a given language, or there are multiple resource
+   *       bundles for the same language, then the entry will not be put in the output map, so the
+   *       output map will lack a key-value pair for that language
    * </ol>
    *
+   * @param outputLanguageAndCountries The languages to translate to
+   * @param baseDirectory The base directory to search files from; if null, the current directory
+   *     will be used
    * @return A map containing the resource bundles found for the provided output languages; note
    *     that if a resource bundle is not found for a certain language, the resulting map will not
    *     contain that language key
    */
-  Map<LanguageAndCountry, ResourceBundle> retrieve();
+  Map<LanguageAndCountry, ResourceBundle> retrieve(
+      Set<LanguageAndCountry> outputLanguageAndCountries, File baseDirectory);
 }
