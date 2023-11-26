@@ -40,13 +40,13 @@ public final class TranslationEngineFacade {
     var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
     var translationEngineParams = translationEngineParamsProvider.provide(params);
     var translationService = translationEngine.getTranslationService();
-    var outputLanguageAndCountriesNoDuplicates =
-        outputLanguageAndCountries.stream()
-            .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
-            .collect(Collectors.toSet());
     var propertyResourceBundles =
         new PropertyResourceBundlesRetrieverService()
-            .retrieve(outputLanguageAndCountriesNoDuplicates, FileUtils.current());
+            .retrieve(
+                outputLanguageAndCountries.stream()
+                    .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
+                    .collect(Collectors.toSet()),
+                FileUtils.current());
     var outputLanguageAndCountriesWithValidPropertyResourceBundles =
         propertyResourceBundles.keySet();
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
@@ -55,11 +55,16 @@ public final class TranslationEngineFacade {
             + outputLanguageAndCountriesWithValidPropertyResourceBundles);
     System.out.println("Detected entries: " + entries);
     System.out.println("Translation engine: " + translationEngine.getName());
+    if (outputLanguageAndCountriesWithValidPropertyResourceBundles.isEmpty()) {
+      System.err.println(
+          "Could not find any valid Property Resource Bundle file for the detected output languages; operation aborted");
+      return ExitCode.USAGE;
+    }
     System.out.println(
         translationService.translate(
             entries,
             inputLanguageAndCountry,
-            outputLanguageAndCountriesNoDuplicates,
+            outputLanguageAndCountriesWithValidPropertyResourceBundles,
             translationEngineParams));
     return ExitCode.OK;
   }
