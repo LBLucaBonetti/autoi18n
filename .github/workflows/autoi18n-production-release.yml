@@ -43,7 +43,7 @@ jobs:
           fetch-depth: 0
       - name: 'Download all build artifacts'
         uses: actions/download-artifact@v3
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
           java-version: '21'
