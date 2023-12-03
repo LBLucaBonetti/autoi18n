@@ -1,5 +1,6 @@
 package it.lbsoftware.autoi18n;
 
+import static it.lbsoftware.autoi18n.TestUtils.createPropertyResourceBundleFile;
 import static it.lbsoftware.autoi18n.TestUtils.optionShortTranslationEngine;
 import static it.lbsoftware.autoi18n.TestUtils.parameterEntry;
 import static it.lbsoftware.autoi18n.TestUtils.parameterInputLanguage;
@@ -12,8 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.quarkus.test.junit.QuarkusTest;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -75,7 +79,7 @@ class Autoi18nTests {
 
   @Test
   @DisplayName("Should gather entries defaulting to empty")
-  void test3() {
+  void test3() throws IOException {
     // Given
     String[] args = {
       parameterInputLanguage("en"),
@@ -90,6 +94,9 @@ class Autoi18nTests {
       requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
     int entryArgsLength = args.length - 4;
+    var testDirectoryPath = FileUtils.current().toPath();
+    var itPropertiesFile =
+        createPropertyResourceBundleFile(testDirectoryPath, "labels_it.properties");
 
     var exitCode = commandLine.execute(args);
 
@@ -103,11 +110,12 @@ class Autoi18nTests {
     assertEquals("value7", entries.get("key4"));
     assertEquals(StringUtils.EMPTY, entries.get("key5"));
     assertEquals(StringUtils.EMPTY, entries.get("key6"));
+    Files.deleteIfExists(itPropertiesFile);
   }
 
   @Test
   @DisplayName("Should pick the latest key entry")
-  void test4() {
+  void test4() throws IOException {
     // Given
     String[] args = {
       parameterInputLanguage("en"),
@@ -119,6 +127,9 @@ class Autoi18nTests {
       parameterEntry("key"),
       requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
+    var testDirectoryPath = FileUtils.current().toPath();
+    var itPropertiesFile =
+        createPropertyResourceBundleFile(testDirectoryPath, "labels_it.properties");
 
     // When
     var exitCode = commandLine.execute(args);
@@ -128,6 +139,7 @@ class Autoi18nTests {
     var entries = autoi18n.getEntries();
     assertEquals(1, entries.keySet().size());
     assertEquals(StringUtils.EMPTY, entries.get("key"));
+    Files.deleteIfExists(itPropertiesFile);
   }
 
   @Test
@@ -151,7 +163,7 @@ class Autoi18nTests {
 
   @Test
   @DisplayName("Should pick multiple output language and countries")
-  void test6() {
+  void test6() throws IOException {
     // Given
     var lan1 = "en-US";
     var lan2 = "it";
@@ -162,6 +174,11 @@ class Autoi18nTests {
       requiredTranslationEngineParamsForDefaultTranslationEngine()
     };
     int outputLanguageArgsLength = 2;
+    var testDirectoryPath = FileUtils.current().toPath();
+    var lan1PropertiesFile =
+        createPropertyResourceBundleFile(testDirectoryPath, "labels_" + lan1 + ".properties");
+    var lan2PropertiesFile =
+        createPropertyResourceBundleFile(testDirectoryPath, "labels_" + lan2 + ".properties");
 
     // When
     var exitCode = commandLine.execute(args);
@@ -176,5 +193,7 @@ class Autoi18nTests {
             + "-"
             + outputLanguageAndCountries.getFirst().getCountry());
     assertEquals(lan2, outputLanguageAndCountries.getLast().getLanguage());
+    Files.deleteIfExists(lan1PropertiesFile);
+    Files.deleteIfExists(lan2PropertiesFile);
   }
 }

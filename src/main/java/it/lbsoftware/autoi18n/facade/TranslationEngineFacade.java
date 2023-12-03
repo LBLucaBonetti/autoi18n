@@ -1,11 +1,13 @@
 package it.lbsoftware.autoi18n.facade;
 
+import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundlesRetrieverService;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import picocli.CommandLine.ExitCode;
 
 @RequiredArgsConstructor
@@ -38,19 +40,31 @@ public final class TranslationEngineFacade {
     var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
     var translationEngineParams = translationEngineParamsProvider.provide(params);
     var translationService = translationEngine.getTranslationService();
-    var outputLanguageAndCountriesNoDuplicates =
-        outputLanguageAndCountries.stream()
-            .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
-            .collect(Collectors.toSet());
+    var propertyResourceBundles =
+        new PropertyResourceBundlesRetrieverService()
+            .retrieve(
+                outputLanguageAndCountries.stream()
+                    .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
+                    .collect(Collectors.toSet()),
+                FileUtils.current());
+    var outputLanguageAndCountriesWithValidPropertyResourceBundles =
+        propertyResourceBundles.keySet();
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
-    System.out.println("Detected output languages: " + outputLanguageAndCountriesNoDuplicates);
+    System.out.println(
+        "Output languages with valid Property Resource Bundle file: "
+            + outputLanguageAndCountriesWithValidPropertyResourceBundles);
     System.out.println("Detected entries: " + entries);
     System.out.println("Translation engine: " + translationEngine.getName());
+    if (outputLanguageAndCountriesWithValidPropertyResourceBundles.isEmpty()) {
+      System.err.println(
+          "Could not find any valid Property Resource Bundle file for the detected output languages; operation aborted");
+      return ExitCode.USAGE;
+    }
     System.out.println(
         translationService.translate(
             entries,
             inputLanguageAndCountry,
-            outputLanguageAndCountriesNoDuplicates,
+            outputLanguageAndCountriesWithValidPropertyResourceBundles,
             translationEngineParams));
     return ExitCode.OK;
   }

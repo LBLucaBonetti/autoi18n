@@ -2,6 +2,10 @@ package it.lbsoftware.autoi18n;
 
 import it.lbsoftware.autoi18n.constants.Constants;
 import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public final class TestUtils {
 
@@ -35,5 +39,19 @@ public final class TestUtils {
             + "=fake-api-key,"
             + TranslationEngineParams.PROJECT_NUMBER_OR_ID_PARAM
             + "=project-number-or-id");
+  }
+
+  public static Path createPropertyResourceBundleFile(final Path directory, final String fileName)
+      throws IOException {
+    var content = """
+app.key1=value1
+app.key2=value2
+app.key3=value3
+""";
+    var filePath = Files.createFile(Path.of(directory.toString(), fileName));
+    try (var fileWriter = new FileWriter(filePath.toFile())) {
+      fileWriter.write(content);
+    }
+    return filePath;
   }
 }

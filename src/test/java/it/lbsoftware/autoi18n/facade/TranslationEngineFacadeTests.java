@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.quarkus.test.junit.QuarkusTest;
+import it.lbsoftware.autoi18n.paramsproviders.TranslationEngineParams;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.util.Collections;
@@ -47,8 +48,44 @@ class TranslationEngineFacadeTests {
   void test2() {
     // Given
     var translationEngine = TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3;
-    Map<String, String> params = Collections.emptyMap();
+    Map<String, String> params =
+        Map.of(
+            TranslationEngineParams.API_KEY_PARAM,
+            "fake-api-key",
+            TranslationEngineParams.PROJECT_NUMBER_OR_ID_PARAM,
+            "project-number-or-id");
     Map<String, String> entries = null;
+    var inputLanguageAndCountry = new LanguageAndCountry("it", null);
+    var outputLanguageAndCountries = List.of(new LanguageAndCountry("en", null));
+    var translationEngineFacade =
+        new TranslationEngineFacade(
+            translationEngine,
+            params,
+            entries,
+            inputLanguageAndCountry,
+            outputLanguageAndCountries);
+
+    // When
+    var res = translationEngineFacade.performTranslation();
+
+    // Then
+    assertNotNull(res);
+    assertEquals(ExitCode.USAGE, res);
+  }
+
+  @Test
+  @DisplayName(
+      "Should return usage exit code when there is no Property Resource Bundle file for the output languages")
+  void test3() {
+    // Given
+    var translationEngine = TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3;
+    Map<String, String> params =
+        Map.of(
+            TranslationEngineParams.API_KEY_PARAM,
+            "fake-api-key",
+            TranslationEngineParams.PROJECT_NUMBER_OR_ID_PARAM,
+            "project-number-or-id");
+    Map<String, String> entries = Map.of("key1", "value1");
     var inputLanguageAndCountry = new LanguageAndCountry("it", null);
     var outputLanguageAndCountries = List.of(new LanguageAndCountry("en", null));
     var translationEngineFacade =
