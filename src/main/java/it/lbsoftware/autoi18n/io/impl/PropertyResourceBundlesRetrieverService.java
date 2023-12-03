@@ -4,6 +4,7 @@ import it.lbsoftware.autoi18n.io.PropertyResourceBundlesRetriever;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,8 +65,8 @@ public class PropertyResourceBundlesRetrieverService implements PropertyResource
   }
 
   private Optional<ResourceBundle> getResourceBundle(final File file) {
-    try {
-      return Optional.of(new PropertyResourceBundle(Files.newInputStream(file.toPath())));
+    try (final InputStream fileInputStream = Files.newInputStream(file.toPath())) {
+      return Optional.of(new PropertyResourceBundle(fileInputStream));
     } catch (IOException | NullPointerException | IllegalArgumentException e) {
       return Optional.empty();
     }
