@@ -3,15 +3,14 @@ package it.lbsoftware.autoi18n.io;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.io.File;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 public interface PropertyResourceBundlesRetriever {
 
   /**
    * Retrieves the resource bundles to write translations to, one per output language; resource
-   * bundles are searched starting from the directory the command was launched by, according to the
-   * following algorithm:
+   * bundles are searched starting from the directory specified, according to the following
+   * algorithm:
    *
    * <ol>
    *   <li>The name of the file must be of the form n_l.properties where n is a word among "label",
@@ -33,6 +32,6 @@ public interface PropertyResourceBundlesRetriever {
    *     that if a resource bundle is not found for a certain language, the resulting map will not
    *     contain that language key
    */
-  Map<LanguageAndCountry, ResourceBundle> retrieve(
+  Map<LanguageAndCountry, File> retrieve(
       Set<LanguageAndCountry> outputLanguageAndCountries, File baseDirectory);
 }

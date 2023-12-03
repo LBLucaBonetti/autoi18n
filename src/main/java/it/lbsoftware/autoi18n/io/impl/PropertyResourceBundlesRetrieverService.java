@@ -24,11 +24,11 @@ public class PropertyResourceBundlesRetrieverService implements PropertyResource
           "|", Set.of("label", "labels", "language", "languages", "translation", "translations"));
 
   @Override
-  public Map<LanguageAndCountry, ResourceBundle> retrieve(
+  public Map<LanguageAndCountry, File> retrieve(
       final Set<LanguageAndCountry> outputLanguageAndCountries, final File baseDirectory) {
     final File validatedBaseDirectory =
         Optional.ofNullable(baseDirectory).filter(File::isDirectory).orElseGet(FileUtils::current);
-    Map<LanguageAndCountry, ResourceBundle> propertyResourceBundles = new HashMap<>();
+    Map<LanguageAndCountry, File> propertyResourceBundles = new HashMap<>();
     outputLanguageAndCountries.forEach(
         (LanguageAndCountry outputLanguageAndCountry) -> {
           var files = retrieve(outputLanguageAndCountry, validatedBaseDirectory);
@@ -53,7 +53,7 @@ public class PropertyResourceBundlesRetrieverService implements PropertyResource
                             + file.getAbsolutePath()
                             + " for language "
                             + outputLanguageAndCountry);
-                    propertyResourceBundles.put(outputLanguageAndCountry, resourceBundle);
+                    propertyResourceBundles.put(outputLanguageAndCountry, file);
                   },
                   () ->
                       System.out.println(
