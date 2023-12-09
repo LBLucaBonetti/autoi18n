@@ -79,7 +79,7 @@ public class PropertyResourceBundlesRetrieverService implements PropertyResource
    * @param outputLanguageAndCountry The output language to translate to
    * @return The files matching the conditions, or an empty set
    */
-  public Set<File> retrieve(
+  private Set<File> retrieve(
       final LanguageAndCountry outputLanguageAndCountry, final File baseDirectory) {
     return FileUtils.listFiles(
             baseDirectory, getIOFileFilter(outputLanguageAndCountry), TrueFileFilter.INSTANCE)
