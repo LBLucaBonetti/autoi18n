@@ -1,5 +1,7 @@
 package it.lbsoftware.autoi18n.facade;
 
+import it.lbsoftware.autoi18n.io.PropertyResourceBundleWriterOptions;
+import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundleWriterService;
 import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundlesRetrieverService;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
@@ -60,12 +62,24 @@ public final class TranslationEngineFacade {
           "Could not find any valid Property Resource Bundle file for the detected output languages; operation aborted");
       return ExitCode.USAGE;
     }
-    System.out.println(
+    var translations =
         translationService.translate(
             entries,
             inputLanguageAndCountry,
             outputLanguageAndCountriesWithValidPropertyResourceBundles,
-            translationEngineParams));
+            translationEngineParams);
+    var propertyResourceBundleWriter = new PropertyResourceBundleWriterService();
+    translations.forEach(
+        (languageAndCountry, translationsToWrite) -> {
+          if (!propertyResourceBundles.containsKey(languageAndCountry)) {
+            return;
+          }
+          var propertyResourceBundleFile = propertyResourceBundles.get(languageAndCountry);
+          propertyResourceBundleWriter.write(
+              propertyResourceBundleFile,
+              translationsToWrite,
+              new PropertyResourceBundleWriterOptions(true));
+        });
     return ExitCode.OK;
   }
 }
