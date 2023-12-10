@@ -1,6 +1,5 @@
 package it.lbsoftware.autoi18n.utils;
 
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -77,9 +76,5 @@ public class LanguageAndCountry {
   @Override
   public int hashCode() {
     return Objects.hash(language);
-  }
-
-  public Locale toLocale() {
-    return StringUtils.isBlank(country) ? Locale.of(language) : Locale.of(language, country);
   }
 }
