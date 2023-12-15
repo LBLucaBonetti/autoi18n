@@ -1,8 +1,11 @@
 package it.lbsoftware.autoi18n.facade;
 
+import it.lbsoftware.autoi18n.io.PropertyResourceBundleWriterOptions;
+import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundleWriterService;
 import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundlesRetrieverService;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,12 +63,26 @@ public final class TranslationEngineFacade {
           "Could not find any valid Property Resource Bundle file for the detected output languages; operation aborted");
       return ExitCode.USAGE;
     }
-    System.out.println(
+    var translations =
         translationService.translate(
             entries,
             inputLanguageAndCountry,
             outputLanguageAndCountriesWithValidPropertyResourceBundles,
-            translationEngineParams));
+            translationEngineParams);
+    var propertyResourceBundleWriter = new PropertyResourceBundleWriterService();
+    translations.forEach(
+        (languageAndCountry, translationsToWrite) -> {
+          if (!propertyResourceBundles.containsKey(languageAndCountry)) {
+            return;
+          }
+          var propertyResourceBundleFile = propertyResourceBundles.get(languageAndCountry);
+          if (!propertyResourceBundleWriter.write(
+              propertyResourceBundleFile,
+              translationsToWrite,
+              new PropertyResourceBundleWriterOptions(true, StandardCharsets.ISO_8859_1))) {
+            System.err.println("I/O critical error");
+          }
+        });
     return ExitCode.OK;
   }
 }
