@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import io.quarkus.test.junit.QuarkusTest;
 import it.lbsoftware.autoi18n.io.PropertyResourceBundleWriterOptions;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -41,7 +42,7 @@ class PropertyResourceBundleWriterServiceTests {
         propertyResourceBundleWriterService.write(
             filePath.toFile(),
             Map.of(key, updatedValue),
-            new PropertyResourceBundleWriterOptions(true));
+            PropertyResourceBundleWriterOptions.DEFAULT);
 
     // Then
     assertTrue(res);
@@ -65,7 +66,7 @@ class PropertyResourceBundleWriterServiceTests {
         propertyResourceBundleWriterService.write(
             file1Path.toFile(),
             Map.of("key", "value"),
-            new PropertyResourceBundleWriterOptions(true));
+            PropertyResourceBundleWriterOptions.DEFAULT);
 
     // Then
     assertFalse(res);
@@ -86,7 +87,7 @@ class PropertyResourceBundleWriterServiceTests {
         propertyResourceBundleWriterService.write(
             file1Path.toFile(),
             Map.of("key", "value"),
-            new PropertyResourceBundleWriterOptions(true));
+            PropertyResourceBundleWriterOptions.DEFAULT);
 
     // Then
     assertFalse(res);
@@ -115,7 +116,7 @@ class PropertyResourceBundleWriterServiceTests {
         propertyResourceBundleWriterService.write(
             filePath.toFile(),
             Map.of(key, updatedValue, key2, value2),
-            new PropertyResourceBundleWriterOptions(false));
+            new PropertyResourceBundleWriterOptions(false, StandardCharsets.ISO_8859_1));
 
     // Then
     assertTrue(res);

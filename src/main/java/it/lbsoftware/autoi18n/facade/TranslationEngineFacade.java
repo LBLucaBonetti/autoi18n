@@ -5,6 +5,7 @@ import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundleWriterService;
 import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundlesRetrieverService;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -75,10 +76,12 @@ public final class TranslationEngineFacade {
             return;
           }
           var propertyResourceBundleFile = propertyResourceBundles.get(languageAndCountry);
-          propertyResourceBundleWriter.write(
+          if (!propertyResourceBundleWriter.write(
               propertyResourceBundleFile,
               translationsToWrite,
-              new PropertyResourceBundleWriterOptions(true));
+              new PropertyResourceBundleWriterOptions(true, StandardCharsets.ISO_8859_1))) {
+            System.err.println("I/O critical error");
+          }
         });
     return ExitCode.OK;
   }
