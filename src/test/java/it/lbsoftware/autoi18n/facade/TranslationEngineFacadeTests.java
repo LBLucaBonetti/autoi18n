@@ -10,6 +10,7 @@ import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
@@ -33,7 +34,8 @@ class TranslationEngineFacadeTests {
             params,
             entries,
             inputLanguageAndCountry,
-            outputLanguageAndCountries);
+            outputLanguageAndCountries,
+            FileUtils.current());
 
     // When
     var res = translationEngineFacade.performTranslation();
@@ -63,7 +65,8 @@ class TranslationEngineFacadeTests {
             params,
             entries,
             inputLanguageAndCountry,
-            outputLanguageAndCountries);
+            outputLanguageAndCountries,
+            FileUtils.current());
 
     // When
     var res = translationEngineFacade.performTranslation();
@@ -94,7 +97,8 @@ class TranslationEngineFacadeTests {
             params,
             entries,
             inputLanguageAndCountry,
-            outputLanguageAndCountries);
+            outputLanguageAndCountries,
+            FileUtils.current());
 
     // When
     var res = translationEngineFacade.performTranslation();
