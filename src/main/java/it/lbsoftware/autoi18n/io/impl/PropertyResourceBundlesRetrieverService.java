@@ -27,12 +27,10 @@ public class PropertyResourceBundlesRetrieverService implements PropertyResource
   @Override
   public Map<LanguageAndCountry, File> retrieve(
       final Set<LanguageAndCountry> outputLanguageAndCountries, final File baseDirectory) {
-    final File validatedBaseDirectory =
-        Optional.ofNullable(baseDirectory).filter(File::isDirectory).orElseGet(FileUtils::current);
     Map<LanguageAndCountry, File> propertyResourceBundles = new HashMap<>();
     outputLanguageAndCountries.forEach(
         (LanguageAndCountry outputLanguageAndCountry) -> {
-          var files = retrieve(outputLanguageAndCountry, validatedBaseDirectory);
+          var files = retrieve(outputLanguageAndCountry, baseDirectory);
           if (files.isEmpty()) {
             System.out.println("No file found for language " + outputLanguageAndCountry);
             return;

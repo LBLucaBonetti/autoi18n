@@ -1,15 +1,19 @@
 package it.lbsoftware.autoi18n;
 
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
+import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_BASE_DIRECTORY;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_TRANSLATION_ENGINE;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_TRANSLATION_ENGINE_PARAMS;
+import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_BASE_DIRECTORY;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_TRANSLATION_ENGINE;
 
+import it.lbsoftware.autoi18n.converters.BaseDirectoryConverter;
 import it.lbsoftware.autoi18n.converters.LanguageAndCountryTypeConverter;
 import it.lbsoftware.autoi18n.facade.TranslationEngineFacade;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import it.lbsoftware.autoi18n.utils.VersionProvider;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,12 +90,27 @@ public class Autoi18n implements Callable<Integer> {
       splitSynopsisLabel = ",")
   private Map<String, String> params = new HashMap<>();
 
+  @Getter
+  @Option(
+      names = {OPTION_SHORT_BASE_DIRECTORY, OPTION_LONG_BASE_DIRECTORY},
+      required = false,
+      description =
+          "The base directory to search Property Resource Bundle files from, recursively; if the specified path is invalid, the current directory will be used instead, recursively",
+      paramLabel = "<baseDirectory>",
+      converter = BaseDirectoryConverter.class)
+  private File baseDirectory;
+
   @Spec private CommandSpec commandSpec;
 
   @Override
   public Integer call() {
     return new TranslationEngineFacade(
-            translationEngine, params, entries, inputLanguageAndCountry, outputLanguageAndCountries)
+            translationEngine,
+            params,
+            entries,
+            inputLanguageAndCountry,
+            outputLanguageAndCountries,
+            baseDirectory)
         .performTranslation();
   }
 }

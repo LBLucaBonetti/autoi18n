@@ -1,16 +1,19 @@
 package it.lbsoftware.autoi18n.facade;
 
+import static it.lbsoftware.autoi18n.constants.Constants.DEFAULT_BASE_DIRECTORY;
+
 import it.lbsoftware.autoi18n.io.PropertyResourceBundleWriterOptions;
 import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundleWriterService;
 import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundlesRetrieverService;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.FileUtils;
 import picocli.CommandLine.ExitCode;
 
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public final class TranslationEngineFacade {
   private final Map<String, String> entries;
   private final LanguageAndCountry inputLanguageAndCountry;
   private final List<LanguageAndCountry> outputLanguageAndCountries;
+  private final File baseDirectory;
 
   /**
    * Performs a whole translation operation and returns the resulting exit code
@@ -40,6 +44,8 @@ public final class TranslationEngineFacade {
       System.err.println("No entries to translate; operation aborted");
       return ExitCode.USAGE;
     }
+    final File validatedBaseDirectory =
+        Optional.ofNullable(baseDirectory).orElse(DEFAULT_BASE_DIRECTORY);
     var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
     var translationEngineParams = translationEngineParamsProvider.provide(params);
     var translationService = translationEngine.getTranslationService();
@@ -49,7 +55,7 @@ public final class TranslationEngineFacade {
                 outputLanguageAndCountries.stream()
                     .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
                     .collect(Collectors.toSet()),
-                FileUtils.current());
+                validatedBaseDirectory);
     var outputLanguageAndCountriesWithValidPropertyResourceBundles =
         propertyResourceBundles.keySet();
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
