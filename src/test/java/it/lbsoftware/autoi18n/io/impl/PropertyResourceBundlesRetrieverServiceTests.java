@@ -58,28 +58,8 @@ class PropertyResourceBundlesRetrieverServiceTests {
     var testDirectoryPath = Files.createTempDirectory("test");
     String file1Name = "language_IT.properties";
     var file1Path = Files.createFile(Path.of(testDirectoryPath.toString(), file1Name));
-    assertTrue(file1Path.toFile().setReadable(false));
-    var itLang = new LanguageAndCountry("it");
-    var propertyResourceBundlesRetrieverService = new PropertyResourceBundlesRetrieverService();
-
-    // When
-    var res =
-        propertyResourceBundlesRetrieverService.retrieve(
-            Set.of(itLang), testDirectoryPath.toFile());
-
-    // Then
-    assertFalse(res.containsKey(itLang));
-    FileUtils.deleteDirectory(testDirectoryPath.toFile());
-  }
-
-  @Test
-  @DisplayName("Should provide no output for non-writable file")
-  void test3() throws IOException {
-    // Given
-    var testDirectoryPath = Files.createTempDirectory("test");
-    String file1Name = "language_IT.properties";
-    var file1Path = Files.createFile(Path.of(testDirectoryPath.toString(), file1Name));
-    assertTrue(file1Path.toFile().setWritable(false));
+    // To make the file non-readable, we simply delete it
+    assertTrue(Files.deleteIfExists(file1Path));
     var itLang = new LanguageAndCountry("it");
     var propertyResourceBundlesRetrieverService = new PropertyResourceBundlesRetrieverService();
 

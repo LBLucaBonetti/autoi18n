@@ -38,6 +38,14 @@ public final class TestUtils {
     return value;
   }
 
+  public static String optionShortBaseDirectory(final String value) {
+    return Constants.OPTION_SHORT_BASE_DIRECTORY + value;
+  }
+
+  public static String optionLongBaseDirectory(final String value) {
+    return Constants.OPTION_LONG_BASE_DIRECTORY + "=" + value;
+  }
+
   public static String requiredTranslationEngineParamsForDefaultTranslationEngine() {
     return optionLongTranslationEngineParams(
         TranslationEngineParams.API_KEY_PARAM
@@ -49,10 +57,10 @@ public final class TestUtils {
   public static Path createPropertyResourceBundleFile(final Path directory, final String fileName)
       throws IOException {
     var content = """
-app.key1=value1
-app.key2=value2
-app.key3=value3
-""";
+        app.key1=value1
+        app.key2=value2
+        app.key3=value3
+        """;
     return createPropertyResourceBundleFileWithContent(directory, fileName, content);
   }
 

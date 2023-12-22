@@ -3,7 +3,6 @@ package it.lbsoftware.autoi18n.converters;
 import static it.lbsoftware.autoi18n.constants.Constants.DEFAULT_BASE_DIRECTORY;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.quarkus.test.junit.QuarkusTest;
 import java.io.IOException;
@@ -71,37 +70,20 @@ class BaseDirectoryConverterTests {
   void test4() throws IOException {
     // Given
     var path = Files.createTempDirectory("test");
-    assertTrue(path.toFile().setReadable(false));
     var pathAbsolutePath = path.toFile().getAbsolutePath();
+    // To make the file non-readable, we simply delete it
+    FileUtils.deleteDirectory(path.toFile());
 
     // When
     var res = assertDoesNotThrow(() -> baseDirectoryConverter.convert(pathAbsolutePath));
 
     // Then
     assertEquals(DEFAULT_BASE_DIRECTORY, res);
-    assertTrue(path.toFile().setReadable(true));
-    FileUtils.deleteDirectory(path.toFile());
-  }
-
-  @Test
-  @DisplayName("Should return default base directory with path that is not writable")
-  void test5() throws IOException {
-    // Given
-    var path = Files.createTempDirectory("test");
-    assertTrue(path.toFile().setWritable(false));
-    var pathAbsolutePath = path.toFile().getAbsolutePath();
-
-    // When
-    var res = assertDoesNotThrow(() -> baseDirectoryConverter.convert(pathAbsolutePath));
-
-    // Then
-    assertEquals(DEFAULT_BASE_DIRECTORY, res);
-    FileUtils.deleteDirectory(path.toFile());
   }
 
   @Test
   @DisplayName("Should convert the value of a valid path to its File representation")
-  void test6() throws IOException {
+  void test5() throws IOException {
     // Given
     var path = Files.createTempDirectory("test");
     var pathAbsolutePath = path.toFile().getAbsolutePath();

@@ -1,6 +1,7 @@
 package it.lbsoftware.autoi18n;
 
 import static it.lbsoftware.autoi18n.TestUtils.createPropertyResourceBundleFile;
+import static it.lbsoftware.autoi18n.TestUtils.optionShortBaseDirectory;
 import static it.lbsoftware.autoi18n.TestUtils.optionShortTranslationEngine;
 import static it.lbsoftware.autoi18n.TestUtils.parameterEntry;
 import static it.lbsoftware.autoi18n.TestUtils.parameterInputLanguage;
@@ -81,22 +82,22 @@ class Autoi18nTests {
   @DisplayName("Should gather entries defaulting to empty")
   void test3() throws IOException {
     // Given
+    var testDirectoryPath = Files.createTempDirectory("test");
     String[] args = {
-      parameterInputLanguage("en"),
-      parameterOutputLanguages("it"),
-      parameterEntry("key1=value1"),
-      parameterEntry("key2"),
-      parameterEntry("key3="),
-      parameterEntry("key4=value4"),
-      parameterEntry("key5"),
-      parameterEntry("key6="),
-      parameterEntry("key4=value7"),
-      requiredTranslationEngineParamsForDefaultTranslationEngine()
+        parameterInputLanguage("en"),
+        parameterOutputLanguages("it"),
+        parameterEntry("key1=value1"),
+        parameterEntry("key2"),
+        parameterEntry("key3="),
+        parameterEntry("key4=value4"),
+        parameterEntry("key5"),
+        parameterEntry("key6="),
+        parameterEntry("key4=value7"), // key4 is repeated on purpose
+        requiredTranslationEngineParamsForDefaultTranslationEngine(),
+        optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
     };
-    int entryArgsLength = args.length - 4;
-    var testDirectoryPath = FileUtils.current().toPath();
-    var itPropertiesFile =
-        createPropertyResourceBundleFile(testDirectoryPath, "labels_it.properties");
+    int entryArgsLength = 6; // the number of distinct entries for parameters
+    createPropertyResourceBundleFile(testDirectoryPath, "labels_it.properties");
 
     var exitCode = commandLine.execute(args);
 
@@ -110,26 +111,26 @@ class Autoi18nTests {
     assertEquals("value7", entries.get("key4"));
     assertEquals(StringUtils.EMPTY, entries.get("key5"));
     assertEquals(StringUtils.EMPTY, entries.get("key6"));
-    Files.deleteIfExists(itPropertiesFile);
+    FileUtils.deleteDirectory(testDirectoryPath.toFile());
   }
 
   @Test
   @DisplayName("Should pick the latest key entry")
   void test4() throws IOException {
     // Given
+    var testDirectoryPath = Files.createTempDirectory("test");
     String[] args = {
-      parameterInputLanguage("en"),
-      parameterOutputLanguages("it"),
-      parameterEntry("key=value1"),
-      parameterEntry("key=value2"),
-      parameterEntry("key=value3"),
-      parameterEntry("key="),
-      parameterEntry("key"),
-      requiredTranslationEngineParamsForDefaultTranslationEngine()
+        parameterInputLanguage("en"),
+        parameterOutputLanguages("it"),
+        parameterEntry("key=value1"),
+        parameterEntry("key=value2"),
+        parameterEntry("key=value3"),
+        parameterEntry("key="),
+        parameterEntry("key"),
+        requiredTranslationEngineParamsForDefaultTranslationEngine(),
+        optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
     };
-    var testDirectoryPath = FileUtils.current().toPath();
-    var itPropertiesFile =
-        createPropertyResourceBundleFile(testDirectoryPath, "labels_it.properties");
+    createPropertyResourceBundleFile(testDirectoryPath, "labels_it.properties");
 
     // When
     var exitCode = commandLine.execute(args);
@@ -139,7 +140,7 @@ class Autoi18nTests {
     var entries = autoi18n.getEntries();
     assertEquals(1, entries.keySet().size());
     assertEquals(StringUtils.EMPTY, entries.get("key"));
-    Files.deleteIfExists(itPropertiesFile);
+    FileUtils.deleteDirectory(testDirectoryPath.toFile());
   }
 
   @Test
@@ -147,10 +148,10 @@ class Autoi18nTests {
   void test5() {
     // Given
     String[] args = {
-      parameterInputLanguage("en"),
-      parameterOutputLanguages("it"),
-      parameterEntry("key1=value1"),
-      optionShortTranslationEngine("invalidTranslationEngine")
+        parameterInputLanguage("en"),
+        parameterOutputLanguages("it"),
+        parameterEntry("key1=value1"),
+        optionShortTranslationEngine("invalidTranslationEngine")
     };
 
     // When
@@ -167,18 +168,17 @@ class Autoi18nTests {
     // Given
     var lan1 = "en-US";
     var lan2 = "it";
+    var testDirectoryPath = Files.createTempDirectory("test");
     String[] args = {
-      parameterInputLanguage("en"),
-      parameterOutputLanguages(lan1 + "," + lan2),
-      parameterEntry("key1=value1"),
-      requiredTranslationEngineParamsForDefaultTranslationEngine()
+        parameterInputLanguage("en"),
+        parameterOutputLanguages(lan1 + "," + lan2),
+        parameterEntry("key1=value1"),
+        requiredTranslationEngineParamsForDefaultTranslationEngine(),
+        optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
     };
     int outputLanguageArgsLength = 2;
-    var testDirectoryPath = FileUtils.current().toPath();
-    var lan1PropertiesFile =
-        createPropertyResourceBundleFile(testDirectoryPath, "labels_" + lan1 + ".properties");
-    var lan2PropertiesFile =
-        createPropertyResourceBundleFile(testDirectoryPath, "labels_" + lan2 + ".properties");
+    createPropertyResourceBundleFile(testDirectoryPath, "labels_" + lan1 + ".properties");
+    createPropertyResourceBundleFile(testDirectoryPath, "labels_" + lan2 + ".properties");
 
     // When
     var exitCode = commandLine.execute(args);
@@ -193,7 +193,6 @@ class Autoi18nTests {
             + "-"
             + outputLanguageAndCountries.getFirst().getCountry());
     assertEquals(lan2, outputLanguageAndCountries.getLast().getLanguage());
-    Files.deleteIfExists(lan1PropertiesFile);
-    Files.deleteIfExists(lan2PropertiesFile);
+    FileUtils.deleteDirectory(testDirectoryPath.toFile());
   }
 }

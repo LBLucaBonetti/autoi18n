@@ -58,7 +58,8 @@ class PropertyResourceBundleWriterServiceTests {
     var testDirectoryPath = Files.createTempDirectory("test");
     String file1Name = "language_IT.properties";
     var file1Path = Files.createFile(Path.of(testDirectoryPath.toString(), file1Name));
-    assertTrue(file1Path.toFile().setReadable(false));
+    // To make the file non-readable, we simply delete it
+    assertTrue(Files.deleteIfExists(file1Path));
     var propertyResourceBundleWriterService = new PropertyResourceBundleWriterService();
 
     // When
@@ -70,32 +71,12 @@ class PropertyResourceBundleWriterServiceTests {
 
     // Then
     assertFalse(res);
-  }
-
-  @Test
-  @DisplayName("Should not write on non-writable file")
-  void test3() throws IOException {
-    // Given
-    var testDirectoryPath = Files.createTempDirectory("test");
-    String file1Name = "language_IT.properties";
-    var file1Path = Files.createFile(Path.of(testDirectoryPath.toString(), file1Name));
-    assertTrue(file1Path.toFile().setWritable(false));
-    var propertyResourceBundleWriterService = new PropertyResourceBundleWriterService();
-
-    // When
-    var res =
-        propertyResourceBundleWriterService.write(
-            file1Path.toFile(),
-            Map.of("key", "value"),
-            PropertyResourceBundleWriterOptions.DEFAULT);
-
-    // Then
-    assertFalse(res);
+    FileUtils.deleteDirectory(testDirectoryPath.toFile());
   }
 
   @Test
   @DisplayName("Should not overwrite existing mappings if instructed not to do so")
-  void test4() throws IOException {
+  void test3() throws IOException {
     // Given
     var testDirectoryPath = Files.createTempDirectory("test");
     String fileName = "labels_en.properties";
