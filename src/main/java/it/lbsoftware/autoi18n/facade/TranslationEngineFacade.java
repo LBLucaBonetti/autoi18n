@@ -2,13 +2,16 @@ package it.lbsoftware.autoi18n.facade;
 
 import static it.lbsoftware.autoi18n.constants.Constants.DEFAULT_BASE_DIRECTORY;
 
+import it.lbsoftware.autoi18n.io.PropertyResourceBundleBackupWriterOptions;
 import it.lbsoftware.autoi18n.io.PropertyResourceBundleWriterOptions;
+import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundleBackupWriterService;
 import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundleWriterService;
 import it.lbsoftware.autoi18n.io.impl.PropertyResourceBundlesRetrieverService;
 import it.lbsoftware.autoi18n.translations.TranslationEngine;
 import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -76,12 +79,18 @@ public final class TranslationEngineFacade {
             outputLanguageAndCountriesWithValidPropertyResourceBundles,
             translationEngineParams);
     var propertyResourceBundleWriter = new PropertyResourceBundleWriterService();
+    var propertyResourceBundleBackupWriter = new PropertyResourceBundleBackupWriterService();
     translations.forEach(
         (languageAndCountry, translationsToWrite) -> {
           if (!propertyResourceBundles.containsKey(languageAndCountry)) {
             return;
           }
           var propertyResourceBundleFile = propertyResourceBundles.get(languageAndCountry);
+          // Backup
+          propertyResourceBundleBackupWriter.backup(propertyResourceBundleFile,
+              new PropertyResourceBundleBackupWriterOptions(
+                  Path.of(validatedBaseDirectory.getAbsolutePath(), "backup").toFile()));
+          // Write
           if (!propertyResourceBundleWriter.write(
               propertyResourceBundleFile,
               translationsToWrite,
