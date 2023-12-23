@@ -1,6 +1,7 @@
 package it.lbsoftware.autoi18n.io.impl;
 
 import static it.lbsoftware.autoi18n.TestUtils.createPropertyResourceBundleFile;
+import static it.lbsoftware.autoi18n.constants.Constants.DEFAULT_BACKUP_DIRECTORY_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -67,7 +68,8 @@ class PropertyResourceBundleBackupWriterServiceTests {
     var testDirectoryPath = Files.createTempDirectory("test");
     var resourceBundle = createPropertyResourceBundleFile(testDirectoryPath,
         "language_en.properties");
-    var backupDirectoryPath = Path.of(testDirectoryPath.toFile().getAbsolutePath(), "backup");
+    var backupDirectoryPath = Path.of(testDirectoryPath.toFile().getAbsolutePath(),
+        DEFAULT_BACKUP_DIRECTORY_NAME);
     var resourceBundleFileContent = Files.readString(resourceBundle, StandardCharsets.ISO_8859_1);
 
     // When

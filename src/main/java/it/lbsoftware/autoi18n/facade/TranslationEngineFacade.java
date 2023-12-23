@@ -1,5 +1,6 @@
 package it.lbsoftware.autoi18n.facade;
 
+import static it.lbsoftware.autoi18n.constants.Constants.DEFAULT_BACKUP_DIRECTORY_NAME;
 import static it.lbsoftware.autoi18n.constants.Constants.DEFAULT_BASE_DIRECTORY;
 
 import it.lbsoftware.autoi18n.io.PropertyResourceBundleBackupWriterOptions;
@@ -89,7 +90,8 @@ public final class TranslationEngineFacade {
           // Backup
           propertyResourceBundleBackupWriter.backup(propertyResourceBundleFile,
               new PropertyResourceBundleBackupWriterOptions(
-                  Path.of(validatedBaseDirectory.getAbsolutePath(), "backup").toFile()));
+                  Path.of(validatedBaseDirectory.getAbsolutePath(), DEFAULT_BACKUP_DIRECTORY_NAME)
+                      .toFile()));
           // Write
           if (!propertyResourceBundleWriter.write(
               propertyResourceBundleFile,

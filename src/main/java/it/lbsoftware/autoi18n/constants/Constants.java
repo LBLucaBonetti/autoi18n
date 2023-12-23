@@ -12,6 +12,7 @@ public final class Constants {
   public static final String OPTION_SHORT_BASE_DIRECTORY = "-b";
   public static final String OPTION_LONG_BASE_DIRECTORY = "--base-directory";
   public static final File DEFAULT_BASE_DIRECTORY = FileUtils.current();
+  public static final String DEFAULT_BACKUP_DIRECTORY_NAME = AUTOI18N_NAME + "-backup";
 
   private Constants() {
     throw new UnsupportedOperationException("This class cannot be instantiated");
