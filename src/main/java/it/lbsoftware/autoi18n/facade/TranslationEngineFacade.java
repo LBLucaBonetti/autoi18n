@@ -17,10 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import picocli.CommandLine.ExitCode;
 
-@RequiredArgsConstructor
 public final class TranslationEngineFacade {
 
   private final TranslationEngine translationEngine;
@@ -29,6 +27,18 @@ public final class TranslationEngineFacade {
   private final LanguageAndCountry inputLanguageAndCountry;
   private final List<LanguageAndCountry> outputLanguageAndCountries;
   private final File baseDirectory;
+
+  public TranslationEngineFacade(final TranslationEngine translationEngine,
+      final Map<String, String> params, final Map<String, String> entries,
+      final LanguageAndCountry inputLanguageAndCountry,
+      final List<LanguageAndCountry> outputLanguageAndCountries, final File baseDirectory) {
+    this.translationEngine = translationEngine;
+    this.params = params;
+    this.entries = entries;
+    this.inputLanguageAndCountry = inputLanguageAndCountry;
+    this.outputLanguageAndCountries = outputLanguageAndCountries;
+    this.baseDirectory = Optional.ofNullable(baseDirectory).orElse(DEFAULT_BASE_DIRECTORY);
+  }
 
   /**
    * Performs a whole translation operation and returns the resulting exit code
@@ -48,8 +58,7 @@ public final class TranslationEngineFacade {
       System.err.println("No entries to translate; operation aborted");
       return ExitCode.USAGE;
     }
-    final File validatedBaseDirectory =
-        Optional.ofNullable(baseDirectory).orElse(DEFAULT_BASE_DIRECTORY);
+
     var translationEngineParamsProvider = translationEngine.getTranslationEngineParamsProvider();
     var translationEngineParams = translationEngineParamsProvider.provide(params);
     var translationService = translationEngine.getTranslationService();
@@ -59,7 +68,7 @@ public final class TranslationEngineFacade {
                 outputLanguageAndCountries.stream()
                     .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
                     .collect(Collectors.toSet()),
-                validatedBaseDirectory);
+                baseDirectory);
     var outputLanguageAndCountriesWithValidPropertyResourceBundles =
         propertyResourceBundles.keySet();
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
@@ -90,7 +99,7 @@ public final class TranslationEngineFacade {
           // Backup
           propertyResourceBundleBackupWriter.backup(propertyResourceBundleFile,
               new PropertyResourceBundleBackupWriterOptions(
-                  Path.of(validatedBaseDirectory.getAbsolutePath(), DEFAULT_BACKUP_DIRECTORY_NAME)
+                  Path.of(baseDirectory.getAbsolutePath(), DEFAULT_BACKUP_DIRECTORY_NAME)
                       .toFile()));
           // Write
           if (!propertyResourceBundleWriter.write(
