@@ -20,7 +20,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 public class PropertyResourceBundlesRetrieverService implements PropertyResourceBundlesRetriever {
 
-  public static final String POSSIBLE_NAMES =
+  public static final String DEFAULT_POSSIBLE_NAMES =
       String.join(
           "|", Set.of("label", "labels", "language", "languages", "translation", "translations"));
 
@@ -95,7 +95,8 @@ public class PropertyResourceBundlesRetrieverService implements PropertyResource
   }
 
   private IOFileFilter getIOFileFilter(final LanguageAndCountry outputLanguageAndCountry) {
-    var pattern = "(?i)(" + POSSIBLE_NAMES + ")(_|-)" + outputLanguageAndCountry + ".properties";
+    var pattern =
+        "(?i)(" + DEFAULT_POSSIBLE_NAMES + ")(_|-)" + outputLanguageAndCountry + ".properties";
     return new RegexFileFilter(pattern);
   }
 }

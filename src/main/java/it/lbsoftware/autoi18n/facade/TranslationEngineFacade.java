@@ -13,6 +13,7 @@ import it.lbsoftware.autoi18n.utils.LanguageAndCountry;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -65,19 +66,15 @@ public final class TranslationEngineFacade {
     var propertyResourceBundles =
         new PropertyResourceBundlesRetrieverService()
             .retrieve(
-                outputLanguageAndCountries.stream()
-                    .filter((LanguageAndCountry lac) -> !inputLanguageAndCountry.equals(lac))
-                    .collect(Collectors.toSet()),
+                new HashSet<>(outputLanguageAndCountries),
                 baseDirectory);
-    var outputLanguageAndCountriesWithValidPropertyResourceBundles =
-        propertyResourceBundles.keySet();
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
     System.out.println(
         "Output languages with valid Property Resource Bundle file: "
-            + outputLanguageAndCountriesWithValidPropertyResourceBundles);
+            + propertyResourceBundles.keySet());
     System.out.println("Detected entries: " + entries);
     System.out.println("Translation engine: " + translationEngine.getName());
-    if (outputLanguageAndCountriesWithValidPropertyResourceBundles.isEmpty()) {
+    if (propertyResourceBundles.keySet().isEmpty()) {
       System.err.println(
           "Could not find any valid Property Resource Bundle file for the detected output languages; operation aborted");
       return ExitCode.USAGE;
@@ -86,8 +83,16 @@ public final class TranslationEngineFacade {
         translationService.translate(
             entries,
             inputLanguageAndCountry,
-            outputLanguageAndCountriesWithValidPropertyResourceBundles,
+            propertyResourceBundles.keySet().stream()
+                .filter((LanguageAndCountry lac) -> !lac.equals(inputLanguageAndCountry)).collect(
+                    Collectors.toSet()), // Avoid translating from x to x language
             translationEngineParams);
+    // Add the x to x language translation, if any
+    if (propertyResourceBundles.containsKey(inputLanguageAndCountry)) {
+      System.out.println("Did not translate entries from " + inputLanguageAndCountry
+          + " because the same language is also an output one");
+      translations.put(inputLanguageAndCountry, entries);
+    }
     var propertyResourceBundleWriter = new PropertyResourceBundleWriterService();
     var propertyResourceBundleBackupWriter = new PropertyResourceBundleBackupWriterService();
     translations.forEach(
@@ -97,10 +102,13 @@ public final class TranslationEngineFacade {
           }
           var propertyResourceBundleFile = propertyResourceBundles.get(languageAndCountry);
           // Backup
-          propertyResourceBundleBackupWriter.backup(propertyResourceBundleFile,
+          if (!propertyResourceBundleBackupWriter.backup(propertyResourceBundleFile,
               new PropertyResourceBundleBackupWriterOptions(
                   Path.of(baseDirectory.getAbsolutePath(), DEFAULT_BACKUP_DIRECTORY_NAME)
-                      .toFile()));
+                      .toFile()))) {
+            System.err.println("Error performing original file backup");
+            return;
+          }
           // Write
           if (!propertyResourceBundleWriter.write(
               propertyResourceBundleFile,

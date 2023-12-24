@@ -26,11 +26,10 @@ public interface PropertyResourceBundlesRetriever {
    * </ol>
    *
    * @param outputLanguageAndCountries The languages to translate to
-   * @param baseDirectory The base directory to search files from; if null, the current directory
-   *     will be used
+   * @param baseDirectory              The base directory to search files from
    * @return A map containing the resource bundles found for the provided output languages; note
-   *     that if a resource bundle is not found for a certain language, the resulting map will not
-   *     contain that language key
+   * that if a resource bundle is not found for a certain language, the resulting map will not
+   * contain that language key
    */
   Map<LanguageAndCountry, File> retrieve(
       Set<LanguageAndCountry> outputLanguageAndCountries, File baseDirectory);
