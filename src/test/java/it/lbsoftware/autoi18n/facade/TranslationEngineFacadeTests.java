@@ -35,7 +35,8 @@ class TranslationEngineFacadeTests {
             entries,
             inputLanguageAndCountry,
             outputLanguageAndCountries,
-            FileUtils.current());
+            FileUtils.current(),
+            false);
 
     // When
     var res = translationEngineFacade.performTranslation();
@@ -66,7 +67,8 @@ class TranslationEngineFacadeTests {
             entries,
             inputLanguageAndCountry,
             outputLanguageAndCountries,
-            FileUtils.current());
+            FileUtils.current(),
+            false);
 
     // When
     var res = translationEngineFacade.performTranslation();
@@ -98,7 +100,8 @@ class TranslationEngineFacadeTests {
             entries,
             inputLanguageAndCountry,
             outputLanguageAndCountries,
-            FileUtils.current());
+            FileUtils.current(),
+            false);
 
     // When
     var res = translationEngineFacade.performTranslation();

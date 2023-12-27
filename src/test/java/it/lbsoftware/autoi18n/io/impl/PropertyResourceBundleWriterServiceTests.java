@@ -42,7 +42,7 @@ class PropertyResourceBundleWriterServiceTests {
         propertyResourceBundleWriterService.write(
             filePath.toFile(),
             Map.of(key, updatedValue),
-            PropertyResourceBundleWriterOptions.DEFAULT);
+            new PropertyResourceBundleWriterOptions(true, StandardCharsets.ISO_8859_1));
 
     // Then
     assertTrue(res);

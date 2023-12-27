@@ -2,9 +2,11 @@ package it.lbsoftware.autoi18n;
 
 import static it.lbsoftware.autoi18n.constants.Constants.AUTOI18N_NAME;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_BASE_DIRECTORY;
+import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_OVERWRITE_ENTRIES;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_TRANSLATION_ENGINE;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_LONG_TRANSLATION_ENGINE_PARAMS;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_BASE_DIRECTORY;
+import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_OVERWRITE_ENTRIES;
 import static it.lbsoftware.autoi18n.constants.Constants.OPTION_SHORT_TRANSLATION_ENGINE;
 
 import it.lbsoftware.autoi18n.converters.BaseDirectoryConverter;
@@ -66,14 +68,14 @@ public class Autoi18n implements Callable<Integer> {
       names = {OPTION_SHORT_TRANSLATION_ENGINE, OPTION_LONG_TRANSLATION_ENGINE},
       required = false,
       description = {
-          "The translation engine to use; the following engines are actually available:",
-          "* GOOGLE_CLOUD_TRANSLATION_V3",
-          "  Parameters via --translation-engine-params:",
-          "  * api-key: the API key to use",
-          "  * project-number-or-id: the Google Cloud project number or id to use",
-          "* LIBRE_TRANSLATE",
-          "  Parameters via --translation-engine-params:",
-          "  <no parameters required>"
+        "The translation engine to use; the following engines are actually available:",
+        "* GOOGLE_CLOUD_TRANSLATION_V3",
+        "  Parameters via --translation-engine-params:",
+        "  * api-key: the API key to use",
+        "  * project-number-or-id: the Google Cloud project number or id to use",
+        "* LIBRE_TRANSLATE",
+        "  Parameters via --translation-engine-params:",
+        "  <no parameters required>"
       },
       paramLabel = "<translationEngine>")
   private TranslationEngine translationEngine = TranslationEngine.GOOGLE_CLOUD_TRANSLATION_V3;
@@ -100,18 +102,27 @@ public class Autoi18n implements Callable<Integer> {
       converter = BaseDirectoryConverter.class)
   private File baseDirectory;
 
-  @Spec
-  private CommandSpec commandSpec;
+  @Getter
+  @Option(
+      names = {OPTION_SHORT_OVERWRITE_ENTRIES, OPTION_LONG_OVERWRITE_ENTRIES},
+      required = false,
+      description =
+          "If set, the already-present entries in target Property Resource Bundle files will be silently overwritten; defaults to false",
+      paramLabel = "<overwrite-entries>")
+  private boolean overwriteEntries;
+
+  @Spec private CommandSpec commandSpec;
 
   @Override
   public Integer call() {
     return new TranslationEngineFacade(
-        translationEngine,
-        params,
-        entries,
-        inputLanguageAndCountry,
-        outputLanguageAndCountries,
-        baseDirectory)
+            translationEngine,
+            params,
+            entries,
+            inputLanguageAndCountry,
+            outputLanguageAndCountries,
+            baseDirectory,
+            overwriteEntries)
         .performTranslation();
   }
 }
