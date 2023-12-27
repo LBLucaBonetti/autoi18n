@@ -28,17 +28,23 @@ public final class TranslationEngineFacade {
   private final LanguageAndCountry inputLanguageAndCountry;
   private final List<LanguageAndCountry> outputLanguageAndCountries;
   private final File baseDirectory;
+  private final boolean overwriteEntries;
 
-  public TranslationEngineFacade(final TranslationEngine translationEngine,
-      final Map<String, String> params, final Map<String, String> entries,
+  public TranslationEngineFacade(
+      final TranslationEngine translationEngine,
+      final Map<String, String> params,
+      final Map<String, String> entries,
       final LanguageAndCountry inputLanguageAndCountry,
-      final List<LanguageAndCountry> outputLanguageAndCountries, final File baseDirectory) {
+      final List<LanguageAndCountry> outputLanguageAndCountries,
+      final File baseDirectory,
+      final boolean overwriteEntries) {
     this.translationEngine = translationEngine;
     this.params = params;
     this.entries = entries;
     this.inputLanguageAndCountry = inputLanguageAndCountry;
     this.outputLanguageAndCountries = outputLanguageAndCountries;
     this.baseDirectory = Optional.ofNullable(baseDirectory).orElse(DEFAULT_BASE_DIRECTORY);
+    this.overwriteEntries = overwriteEntries;
   }
 
   /**
@@ -65,9 +71,7 @@ public final class TranslationEngineFacade {
     var translationService = translationEngine.getTranslationService();
     var propertyResourceBundles =
         new PropertyResourceBundlesRetrieverService()
-            .retrieve(
-                new HashSet<>(outputLanguageAndCountries),
-                baseDirectory);
+            .retrieve(new HashSet<>(outputLanguageAndCountries), baseDirectory);
     System.out.println("Detected input language: " + inputLanguageAndCountry.toString());
     System.out.println(
         "Output languages with valid Property Resource Bundle file: "
@@ -84,13 +88,15 @@ public final class TranslationEngineFacade {
             entries,
             inputLanguageAndCountry,
             propertyResourceBundles.keySet().stream()
-                .filter((LanguageAndCountry lac) -> !lac.equals(inputLanguageAndCountry)).collect(
-                    Collectors.toSet()), // Avoid translating from x to x language
+                .filter((LanguageAndCountry lac) -> !lac.equals(inputLanguageAndCountry))
+                .collect(Collectors.toSet()), // Avoid translating from x to x language
             translationEngineParams);
     // Add the x to x language translation, if any
     if (propertyResourceBundles.containsKey(inputLanguageAndCountry)) {
-      System.out.println("Did not translate entries from " + inputLanguageAndCountry
-          + " because the same language is also an output one");
+      System.out.println(
+          "Did not translate entries from "
+              + inputLanguageAndCountry
+              + " because the same language is also an output one");
       translations.put(inputLanguageAndCountry, entries);
     }
     var propertyResourceBundleWriter = new PropertyResourceBundleWriterService();
@@ -102,7 +108,8 @@ public final class TranslationEngineFacade {
           }
           var propertyResourceBundleFile = propertyResourceBundles.get(languageAndCountry);
           // Backup
-          if (!propertyResourceBundleBackupWriter.backup(propertyResourceBundleFile,
+          if (!propertyResourceBundleBackupWriter.backup(
+              propertyResourceBundleFile,
               new PropertyResourceBundleBackupWriterOptions(
                   Path.of(baseDirectory.getAbsolutePath(), DEFAULT_BACKUP_DIRECTORY_NAME)
                       .toFile()))) {
@@ -113,7 +120,8 @@ public final class TranslationEngineFacade {
           if (!propertyResourceBundleWriter.write(
               propertyResourceBundleFile,
               translationsToWrite,
-              new PropertyResourceBundleWriterOptions(true, StandardCharsets.ISO_8859_1))) {
+              new PropertyResourceBundleWriterOptions(
+                  overwriteEntries, StandardCharsets.ISO_8859_1))) {
             System.err.println("I/O critical error");
           }
         });

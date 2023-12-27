@@ -6,5 +6,5 @@ import java.nio.charset.StandardCharsets;
 public record PropertyResourceBundleWriterOptions(
     boolean overwriteExistingMappings, Charset charset) {
   public static PropertyResourceBundleWriterOptions DEFAULT =
-      new PropertyResourceBundleWriterOptions(true, StandardCharsets.ISO_8859_1);
+      new PropertyResourceBundleWriterOptions(false, StandardCharsets.ISO_8859_1);
 }

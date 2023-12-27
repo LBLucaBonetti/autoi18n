@@ -84,17 +84,17 @@ class Autoi18nTests {
     // Given
     var testDirectoryPath = Files.createTempDirectory("test");
     String[] args = {
-        parameterInputLanguage("en"),
-        parameterOutputLanguages("it"),
-        parameterEntry("key1=value1"),
-        parameterEntry("key2"),
-        parameterEntry("key3="),
-        parameterEntry("key4=value4"),
-        parameterEntry("key5"),
-        parameterEntry("key6="),
-        parameterEntry("key4=value7"), // key4 is repeated on purpose
-        requiredTranslationEngineParamsForDefaultTranslationEngine(),
-        optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
+      parameterInputLanguage("en"),
+      parameterOutputLanguages("it"),
+      parameterEntry("key1=value1"),
+      parameterEntry("key2"),
+      parameterEntry("key3="),
+      parameterEntry("key4=value4"),
+      parameterEntry("key5"),
+      parameterEntry("key6="),
+      parameterEntry("key4=value7"), // key4 is repeated on purpose
+      requiredTranslationEngineParamsForDefaultTranslationEngine(),
+      optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
     };
     int entryArgsLength = 6; // the number of distinct entries for parameters
     createPropertyResourceBundleFile(testDirectoryPath, "labels_it.properties");
@@ -120,15 +120,15 @@ class Autoi18nTests {
     // Given
     var testDirectoryPath = Files.createTempDirectory("test");
     String[] args = {
-        parameterInputLanguage("en"),
-        parameterOutputLanguages("it"),
-        parameterEntry("key=value1"),
-        parameterEntry("key=value2"),
-        parameterEntry("key=value3"),
-        parameterEntry("key="),
-        parameterEntry("key"),
-        requiredTranslationEngineParamsForDefaultTranslationEngine(),
-        optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
+      parameterInputLanguage("en"),
+      parameterOutputLanguages("it"),
+      parameterEntry("key=value1"),
+      parameterEntry("key=value2"),
+      parameterEntry("key=value3"),
+      parameterEntry("key="),
+      parameterEntry("key"),
+      requiredTranslationEngineParamsForDefaultTranslationEngine(),
+      optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
     };
     createPropertyResourceBundleFile(testDirectoryPath, "labels_it.properties");
 
@@ -148,10 +148,10 @@ class Autoi18nTests {
   void test5() {
     // Given
     String[] args = {
-        parameterInputLanguage("en"),
-        parameterOutputLanguages("it"),
-        parameterEntry("key1=value1"),
-        optionShortTranslationEngine("invalidTranslationEngine")
+      parameterInputLanguage("en"),
+      parameterOutputLanguages("it"),
+      parameterEntry("key1=value1"),
+      optionShortTranslationEngine("invalidTranslationEngine")
     };
 
     // When
@@ -170,11 +170,11 @@ class Autoi18nTests {
     var lan2 = "it";
     var testDirectoryPath = Files.createTempDirectory("test");
     String[] args = {
-        parameterInputLanguage("en"),
-        parameterOutputLanguages(lan1 + "," + lan2),
-        parameterEntry("key1=value1"),
-        requiredTranslationEngineParamsForDefaultTranslationEngine(),
-        optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
+      parameterInputLanguage("en"),
+      parameterOutputLanguages(lan1 + "," + lan2),
+      parameterEntry("key1=value1"),
+      requiredTranslationEngineParamsForDefaultTranslationEngine(),
+      optionShortBaseDirectory(testDirectoryPath.toFile().getAbsolutePath())
     };
     int outputLanguageArgsLength = 2;
     createPropertyResourceBundleFile(testDirectoryPath, "labels_" + lan1 + ".properties");

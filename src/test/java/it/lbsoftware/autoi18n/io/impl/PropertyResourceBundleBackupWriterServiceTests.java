@@ -37,8 +37,10 @@ class PropertyResourceBundleBackupWriterServiceTests {
     var testDirectoryPath = Files.createTempDirectory("test");
 
     // When
-    var res = propertyResourceBundleBackupWriter.backup(resourceBundle,
-        new PropertyResourceBundleBackupWriterOptions(testDirectoryPath.toFile()));
+    var res =
+        propertyResourceBundleBackupWriter.backup(
+            resourceBundle,
+            new PropertyResourceBundleBackupWriterOptions(testDirectoryPath.toFile()));
 
     // Then
     assertFalse(res);
@@ -53,8 +55,9 @@ class PropertyResourceBundleBackupWriterServiceTests {
     PropertyResourceBundleBackupWriterOptions propertyResourceBundleBackupWriterOptions = null;
 
     // When
-    var res = propertyResourceBundleBackupWriter.backup(resourceBundle.toFile(),
-        propertyResourceBundleBackupWriterOptions);
+    var res =
+        propertyResourceBundleBackupWriter.backup(
+            resourceBundle.toFile(), propertyResourceBundleBackupWriterOptions);
 
     // Then
     assertFalse(res);
@@ -66,18 +69,18 @@ class PropertyResourceBundleBackupWriterServiceTests {
   void test3() throws IOException {
     // Given
     var testDirectoryPath = Files.createTempDirectory("test");
-    var resourceBundle = createPropertyResourceBundleFile(testDirectoryPath,
-        "language_en.properties");
-    var backupDirectoryPath = Path.of(testDirectoryPath.toFile().getAbsolutePath(),
-        DEFAULT_BACKUP_DIRECTORY_NAME);
+    var resourceBundle =
+        createPropertyResourceBundleFile(testDirectoryPath, "language_en.properties");
+    var backupDirectoryPath =
+        Path.of(testDirectoryPath.toFile().getAbsolutePath(), DEFAULT_BACKUP_DIRECTORY_NAME);
     var resourceBundleFileContent = Files.readString(resourceBundle, StandardCharsets.ISO_8859_1);
 
     // When
-    var res = propertyResourceBundleBackupWriter.backup(resourceBundle.toFile(),
-        new PropertyResourceBundleBackupWriterOptions(
-            backupDirectoryPath.toFile()));
-    var backupFileNumber = backupDirectoryPath.toFile()
-        .listFiles().length;
+    var res =
+        propertyResourceBundleBackupWriter.backup(
+            resourceBundle.toFile(),
+            new PropertyResourceBundleBackupWriterOptions(backupDirectoryPath.toFile()));
+    var backupFileNumber = backupDirectoryPath.toFile().listFiles().length;
     var backupFile = backupDirectoryPath.toFile().listFiles()[0];
     var backupFileContent = Files.readString(backupFile.toPath(), StandardCharsets.ISO_8859_1);
 
@@ -88,5 +91,4 @@ class PropertyResourceBundleBackupWriterServiceTests {
     assertEquals(-1L, Files.mismatch(resourceBundle, backupFile.toPath()));
     FileUtils.deleteDirectory(testDirectoryPath.toFile());
   }
-
 }
