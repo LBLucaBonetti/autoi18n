@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Map;
-import java.util.Properties;
+import nu.studer.java.util.OrderedProperties.OrderedPropertiesBuilder;
 
 public class PropertyResourceBundleWriterService implements PropertyResourceBundleWriter {
 
@@ -18,7 +18,7 @@ public class PropertyResourceBundleWriterService implements PropertyResourceBund
       File resourceBundle,
       Map<String, String> translations,
       PropertyResourceBundleWriterOptions options) {
-    final var existingProperties = new Properties();
+    final var existingProperties = new OrderedPropertiesBuilder().build();
     try (final var inputStreamReader =
         new InputStreamReader(new FileInputStream(resourceBundle), options.charset())) {
       existingProperties.load(inputStreamReader);
@@ -27,7 +27,7 @@ public class PropertyResourceBundleWriterService implements PropertyResourceBund
       } else {
         translations.forEach(
             (String key, String value) -> {
-              if (existingProperties.containsKey(key)) {
+              if (existingProperties.containsProperty(key)) {
                 return;
               }
               existingProperties.setProperty(key, value);
