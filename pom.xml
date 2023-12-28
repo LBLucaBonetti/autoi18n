@@ -136,6 +136,11 @@
       <groupId>io.quarkus</groupId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <artifactId>java-ordered-properties</artifactId>
+      <groupId>nu.studer</groupId>
+      <version>${java-ordered-properties.version}</version>
+    </dependency>
   </dependencies>
   <dependencyManagement>
     <dependencies>
@@ -303,6 +308,7 @@
     <compiler-plugin.version>3.12.1</compiler-plugin.version>
     <exec.mainClass>it.lbsoftware.autoi18n.Autoi18n</exec.mainClass>
     <executable-suffix/>
+    <java-ordered-properties.version>1.0.4</java-ordered-properties.version>
     <jreleaser-plugin.version>1.9.0</jreleaser-plugin.version>
     <lombok.version>1.18.30</lombok.version>
     <maven.compiler.release>21</maven.compiler.release>
