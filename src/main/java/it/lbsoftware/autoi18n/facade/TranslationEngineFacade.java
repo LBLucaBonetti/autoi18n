@@ -116,14 +116,16 @@ public final class TranslationEngineFacade {
             System.err.println("Error performing original file backup");
             return;
           }
+          System.out.println("Backup of the original file successfully completed");
           // Write
           if (!propertyResourceBundleWriter.write(
               propertyResourceBundleFile,
               translationsToWrite,
               new PropertyResourceBundleWriterOptions(
                   overwriteEntries, StandardCharsets.ISO_8859_1))) {
-            System.err.println("I/O critical error");
+            System.err.println("I/O critical error while writing translations to file");
           }
+          System.out.println("Translations successfully written to file");
         });
     return ExitCode.OK;
   }
