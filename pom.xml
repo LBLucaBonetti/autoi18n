@@ -245,9 +245,8 @@
                 <project>
                   <authors>Luca Bonetti</authors>
                   <copyright>2023 Luca Bonetti</copyright>
-                  <description>autoi18n - A CLI tool to automatically translate words from a source
-                    to one or multiple target languages and insert them into Property Resource
-                    Bundles
+                  <description>autoi18n - a CLI tool to automatically insert entries translated from
+                    a source to one or multiple target languages into Property Resource Bundle files
                   </description>
                   <license>MIT</license>
                   <links>
