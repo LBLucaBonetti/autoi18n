@@ -1,6 +1,7 @@
 # autoi18n
 
-autoi18n is a CLI tool to automatically insert entries from a source to one or multiple target
+autoi18n is a CLI tool to automatically insert entries translated from a source to one or multiple
+target
 languages into [Property Resource Bundle](https://en.wikipedia.org/wiki/.properties) files.
 
 The following assumptions should be kept in mind before using autoi18n:
