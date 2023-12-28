@@ -113,19 +113,25 @@ public final class TranslationEngineFacade {
               new PropertyResourceBundleBackupWriterOptions(
                   Path.of(baseDirectory.getAbsolutePath(), DEFAULT_BACKUP_DIRECTORY_NAME)
                       .toFile()))) {
-            System.err.println("Error performing original file backup");
+            System.err.println(
+                "Error performing original file backup for language " + languageAndCountry);
             return;
           }
-          System.out.println("Backup of the original file successfully completed");
+          System.out.println(
+              "Backup of the original file successfully completed for language "
+                  + languageAndCountry);
           // Write
           if (!propertyResourceBundleWriter.write(
               propertyResourceBundleFile,
               translationsToWrite,
               new PropertyResourceBundleWriterOptions(
                   overwriteEntries, StandardCharsets.ISO_8859_1))) {
-            System.err.println("I/O critical error while writing translations to file");
+            System.err.println(
+                "I/O critical error while writing translations to file for language "
+                    + languageAndCountry);
           }
-          System.out.println("Translations successfully written to file");
+          System.out.println(
+              "Translations for language " + languageAndCountry + " successfully written to file");
         });
     return ExitCode.OK;
   }

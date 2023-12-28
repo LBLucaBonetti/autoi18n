@@ -6,11 +6,11 @@ import java.util.Map;
 public interface PropertyResourceBundleWriter {
 
   /**
-   * Writes the translations for the specific language to the specified resource bundle; this method
-   * assumes that the resource bundle and the translations represent the same language, and the
+   * Writes the translations for the specific language to the specified Resource Bundle; this method
+   * assumes that the Resource Bundle and the translations represent the same language, and the
    * output file is readable and writeable
    *
-   * @param resourceBundle The resource bundle file to
+   * @param resourceBundle The Resource Bundle file to write to
    * @param translations The mappings to write
    * @param options The options to use when writing
    * @return True if the write operation succeeds, false otherwise

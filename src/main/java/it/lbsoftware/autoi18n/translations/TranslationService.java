@@ -13,12 +13,11 @@ public interface TranslationService {
    *
    * @param entries Key-value pairs to translate
    * @param inputLanguageAndCountry The source language (and country) of the entries
-   * @param outputLanguageAndCountries The target languages (and countries) for
-   *     googleCloudTranslationV3Translations
+   * @param outputLanguageAndCountries The target languages (and countries) for translations
    * @param translationEngineParams The additional parameters for the translation engine; it should
    *     contain at least the required params, or the calls may fail
    * @return A data structure associating each target language (and country) with its corresponding
-   *     set of key-value pairs translated
+   *     set of translated key-value pairs
    */
   Map<LanguageAndCountry, Map<String, String>> translate(
       Map<String, String> entries,
