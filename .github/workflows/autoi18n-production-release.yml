@@ -16,7 +16,7 @@ jobs:
         with:
           java-version: '21'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -52,7 +52,7 @@ jobs:
           distribution: 'corretto'
           java-version: '21'
       - name: 'Cache Maven packages'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
