@@ -32,9 +32,18 @@ jobs:
           path: |
             target/distributions/*.zip
             target/distributions/*.tar.gz
+  merge:
+    runs-on: ubuntu-latest
+    needs: [ create_distributions ]
+    steps:
+      - name: 'Merge artifacts'
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: artifacts
+          pattern: artifacts-*
   release:
     name: 'Release'
-    needs: [ create_distributions ]
+    needs: [ merge ]
     runs-on: ubuntu-latest
     steps:
       - name: 'Check out repository'
@@ -43,10 +52,6 @@ jobs:
           fetch-depth: 0
       - name: 'Download all build artifacts'
         uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          pattern: artifacts-*
-          merge-multiple: true
       - uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
