@@ -65,4 +65,4 @@ jobs:
       - name: 'Release with JReleaser'
         env:
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B -ntp --file pom.xml -Prelease -DartifactsDir=artifacts jreleaser:full-release
+        run: mvn -X -B -ntp --file pom.xml -Prelease -DartifactsDir=artifacts jreleaser:full-release
