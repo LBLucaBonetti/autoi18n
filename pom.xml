@@ -234,9 +234,9 @@
                       </artifact>
                       <artifact>
                         <path>
-                          {{artifactsDir}}/{{distributionName}}-{{projectVersion}}-osx-x86_64.zip
+                          {{artifactsDir}}/{{distributionName}}-{{projectVersion}}-osx-aarch_64.zip
                         </path>
-                        <platform>osx-x86_64</platform>
+                        <platform>osx-aarch_64</platform>
                       </artifact>
                     </artifacts>
                     <type>BINARY</type>
@@ -322,5 +322,5 @@
     <sonar.organization>lblucabonetti</sonar.organization>
     <surefire-plugin.version>3.2.5</surefire-plugin.version>
   </properties>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
 </project>
