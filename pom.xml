@@ -308,7 +308,7 @@
     <exec.mainClass>it.lbsoftware.autoi18n.Autoi18n</exec.mainClass>
     <executable-suffix/>
     <java-ordered-properties.version>1.0.4</java-ordered-properties.version>
-    <jreleaser-plugin.version>1.12.0</jreleaser-plugin.version>
+    <jreleaser-plugin.version>1.13.1</jreleaser-plugin.version>
     <lombok.version>1.18.34</lombok.version>
     <maven.compiler.release>21</maven.compiler.release>
     <os-plugin.version>1.7.1</os-plugin.version>
