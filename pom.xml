@@ -322,5 +322,5 @@
     <sonar.organization>lblucabonetti</sonar.organization>
     <surefire-plugin.version>3.5.2</surefire-plugin.version>
   </properties>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
 </project>
