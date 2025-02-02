@@ -1,5 +1,8 @@
 # autoi18n
 
+[!WARNING]
+This project is currently archived. No updates (security, bugs, features, dependency updates) will be made. I want to focus on something else.
+
 autoi18n is a CLI tool to automatically insert entries translated from a source to one or multiple
 target
 languages into [Property Resource Bundle](https://en.wikipedia.org/wiki/.properties) files.
